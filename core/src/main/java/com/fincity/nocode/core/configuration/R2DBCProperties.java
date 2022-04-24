@@ -8,7 +8,7 @@ import org.springframework.boot.autoconfigure.r2dbc.R2dbcProperties.Pool;
 import lombok.Data;
 
 @Data
-public class R2dbcProperties {
+public class R2DBCProperties {
 
 	private String name;
 	private boolean generateUniqueName;

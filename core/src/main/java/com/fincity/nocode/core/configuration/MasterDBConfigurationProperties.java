@@ -10,7 +10,7 @@ import lombok.Data;
 @Data
 public class MasterDBConfigurationProperties {
 
-	private MongoDBProperties mongo;
-	private R2dbcProperties r2dbc;
+	private MongoDBCProperties mongo;
+	private R2DBCProperties r2dbc;
 	
 }

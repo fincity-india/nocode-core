@@ -1,9 +1,12 @@
 package com.fincity.nocode.core;
 
+import com.fincity.nocode.core.util.UniqueID;
+
 public class NocodeException extends RuntimeException {
 
 	private int errorCode;
 	private Object[] arguments;
+	private String exceptionId = UniqueID.shortId();
 
 	private static final long serialVersionUID = -5014082890200361721L;
 
@@ -27,6 +30,10 @@ public class NocodeException extends RuntimeException {
 
 	public int getErrorCode() {
 		return errorCode;
+	}
+	
+	public String getExceptionId() {
+		return exceptionId;
 	}
 
 	public Object[] getArguments() {

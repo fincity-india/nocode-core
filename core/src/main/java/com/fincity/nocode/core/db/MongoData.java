@@ -13,12 +13,12 @@ public class MongoData implements IData {
 		this.tenant = tenant;
 	}
 	
-
-	public ITable getTable(String alias)  {
-		
-	}
-	
-	public ITable getTable(String namespace, String name) {
-		
-	}
+//
+//	public ITable getTable(String alias)  {
+//		
+//	}
+//	
+//	public ITable getTable(String namespace, String name) {
+//		
+//	}
 }

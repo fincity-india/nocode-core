@@ -24,7 +24,8 @@ public abstract class NoCodeCoreConfiguration {
 		if (masterDBProps.getMongo() != null) {
 
 			mongoService.createConnection(MultitenantMongoConnectionService.MASTER_TENANT, masterDBProps.getMongo());
-			return new MongoData(mongoService.getDatabase(MultitenantMongoConnectionService.MASTER_TENANT));
+			return new MongoData(MultitenantMongoConnectionService.MASTER_TENANT,
+					mongoService.getDatabase(MultitenantMongoConnectionService.MASTER_TENANT));
 		} else if (masterDBProps.getR2dbc() != null)
 			return new R2DBCData(masterDBProps.getR2dbc());
 

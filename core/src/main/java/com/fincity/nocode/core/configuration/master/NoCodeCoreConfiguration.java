@@ -6,8 +6,8 @@ import org.springframework.context.annotation.Bean;
 import com.fincity.nocode.core.NocodeException;
 import com.fincity.nocode.core.configuration.MasterDBConfigurationProperties;
 import com.fincity.nocode.core.db.IData;
-import com.fincity.nocode.core.db.MongoData;
 import com.fincity.nocode.core.db.R2DBCData;
+import com.fincity.nocode.core.mongo.MongoData;
 import com.fincity.nocode.core.mongo.MultitenantMongoConnectionService;
 
 public abstract class NoCodeCoreConfiguration {

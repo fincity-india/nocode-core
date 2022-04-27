@@ -9,4 +9,10 @@ public class R2DBCData implements IData {
 		throw new NocodeException(2, "Not implemented");
 	}
 
+	@Override
+	public ITable getTable(String namespace, String name) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

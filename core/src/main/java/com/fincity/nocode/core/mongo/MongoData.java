@@ -1,5 +1,7 @@
-package com.fincity.nocode.core.db;
+package com.fincity.nocode.core.mongo;
 
+import com.fincity.nocode.core.db.IData;
+import com.fincity.nocode.core.db.ITable;
 import com.mongodb.reactivestreams.client.MongoDatabase;
 
 public class MongoData implements IData {
@@ -12,13 +14,10 @@ public class MongoData implements IData {
 		this.db = db;
 		this.tenant = tenant;
 	}
-	
-//
-//	public ITable getTable(String alias)  {
-//		
-//	}
-//	
-//	public ITable getTable(String namespace, String name) {
-//		
-//	}
+
+	@Override
+	public ITable getTable(String namespace, String name) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

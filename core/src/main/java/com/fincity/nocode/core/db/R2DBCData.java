@@ -11,7 +11,6 @@ public class R2DBCData implements IData {
 
 	@Override
 	public ITable getTable(String namespace, String name) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 

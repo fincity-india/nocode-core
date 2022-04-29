@@ -14,6 +14,12 @@ public class MongoData implements IData {
 		this.db = db;
 		this.tenant = tenant;
 	}
+	
+	@Override
+	public String getTenant() {
+		
+		return this.tenant;
+	}
 
 	@Override
 	public ITable getTable(String namespace, String name) {

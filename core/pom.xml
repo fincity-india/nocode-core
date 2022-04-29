@@ -14,6 +14,7 @@
 	<description>Core API for integrating into the other no code modules</description>
 	<properties>
 		<java.version>18</java.version>
+		<nocode-kirun-version>1.0.0</nocode-kirun-version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -43,6 +44,11 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-configuration-processor</artifactId>
 			<optional>true</optional>
+		</dependency>
+		<dependency>
+			<groupId>com.fincity.nocode</groupId>
+			<artifactId>kirun-java</artifactId>
+			<version>${nocode-kirun-version}</version>
 		</dependency>
 	</dependencies>
 

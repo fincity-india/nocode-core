@@ -9,7 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.fincity.nocode.core.mongo.MultitenantMongoConnectionService;
-import com.fincity.nocode.kirun.engine.function.namespaces.Namespaces;
+import com.fincity.nocode.core.system.CoreConstants;
+import com.fincity.nocode.core.system.tenant.Tenant;
 
 import reactor.core.publisher.Mono;
 
@@ -36,7 +37,9 @@ public class DataService {
 		
 		if (data.containsKey(tenant)) return Mono.just(data.get(tenant));
 		
-		masterData.getTable(Namespaces.SYSTEM, );
+		ITable tenantTable = masterData.getTable(CoreConstants.NAMESPACE_CORE, Tenant.SCHEMA.getId());
+		
+//		tenantTable.find(Condition)
 		
 		return Mono.just(masterData);
 	}

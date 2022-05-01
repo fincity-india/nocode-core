@@ -28,6 +28,13 @@ public class MongoData implements IData {
 	@Override
 	public ITable getTable(String namespace, String name) {
 
-		return null;
+		var cName = this.getCollectionName(namespace, name);
+		if (tables.containsKey(cName)) return tables.get(cName);
+		
+		
+	}
+	
+	private String getCollectionName(String namespace, String name) {
+		return this.tenant+"_"+namespace+"_"+name;
 	}
 }

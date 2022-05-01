@@ -23,6 +23,7 @@ public class Tenant implements Serializable {
 
 	public static final Schema SCHEMA = new Schema().setType(new SingleType(SchemaType.OBJECT))
 			.setNamespace(CoreConstants.NAMESPACE_CORE).setId(SCHEMA_NAME).setTitle(SCHEMA_NAME)
+			.setVersion(1)
 			.setProperties(Map.of("code",
 					new Schema().setType(new SingleType(SchemaType.STRING)).setMinLength(5).setMaxLength(5), "name",
 					new Schema().setType(new SingleType(SchemaType.STRING)), "type",

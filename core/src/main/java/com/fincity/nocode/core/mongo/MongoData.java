@@ -18,23 +18,27 @@ public class MongoData implements IData {
 		this.db = db;
 		this.tenant = tenant;
 	}
-	
+
 	@Override
 	public String getTenant() {
-		
+
 		return this.tenant;
+	}
+	
+	public MongoDatabase getDb() {
+		return db;
 	}
 
 	@Override
-	public ITable getTable(String namespace, String name) {
+	public ITable getTable(final String namespace, final String name) {
 
-		var cName = this.getCollectionName(namespace, name);
-		if (tables.containsKey(cName)) return tables.get(cName);
-		
-		
+		final var cName = this.getCollectionName(namespace, name);
+		tables.computeIfAbsent(cName, k -> tables.put(cName, new MongoTable(this, namespace, name, k)));
+
+		return tables.get(cName);
 	}
-	
+
 	private String getCollectionName(String namespace, String name) {
-		return this.tenant+"_"+namespace+"_"+name;
+		return this.tenant + "_" + namespace + "_" + name;
 	}
 }

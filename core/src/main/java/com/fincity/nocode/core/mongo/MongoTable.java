@@ -1,6 +1,11 @@
 package com.fincity.nocode.core.mongo;
 
+import org.springframework.data.domain.Page;
+
 import com.fincity.nocode.core.db.ITable;
+import com.google.gson.JsonObject;
+
+import reactor.core.publisher.Mono;
 
 public class MongoTable implements ITable {
 
@@ -31,5 +36,47 @@ public class MongoTable implements ITable {
 
 	public String getCollectionName() {
 		return collectionName;
+	}
+
+	@Override
+	public Mono<JsonObject> create(JsonObject obj) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Mono<JsonObject> getById(String id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Mono<Page<JsonObject>> filter() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Mono<JsonObject> update(JsonObject obj) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Mono<JsonObject> patch(JsonObject obj) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Mono<JsonObject> deleteById(String id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Mono<Integer> deleteByFilter() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

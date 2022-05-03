@@ -46,6 +46,8 @@ public class DataService {
 
 	public Mono<ITable> getTable(String tenant, String namespace, String table) {
 
+		// Don't give the table directly. Check in the data table if there is a different connection that is used.
+		// That gives the flexibility for connecting to other databases for just one table.
 		return this.getData(tenant).map(e -> e.getTable(namespace, table));
 	}
 }

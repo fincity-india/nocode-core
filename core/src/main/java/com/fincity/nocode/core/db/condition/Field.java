@@ -16,6 +16,6 @@ public class Field {
 	}
 	
 	public Condition eq(JsonPrimitive value) {
-		return new Condition(Condition.EQUAL, value);
+		return new Condition(ConditionType.EQUAL, name, value);
 	}
 }

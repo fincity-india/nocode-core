@@ -2,11 +2,14 @@ package com.fincity.nocode.core.db;
 
 import org.springframework.data.domain.Page;
 
+import com.fincity.nocode.kirun.engine.json.schema.Schema;
 import com.google.gson.JsonObject;
 
 import reactor.core.publisher.Mono;
 
 public interface ITable {
+	
+	public Schema getSchema();
 
 	public Mono<JsonObject> create(JsonObject obj);
 

@@ -2,11 +2,19 @@ package com.fincity.nocode.core.db.condition;
 
 import java.io.Serializable;
 
-public class Condition implements Serializable {
+public interface Condition extends Serializable {
 
-	private static final long serialVersionUID = -1332747834270025482L;
+	public ConditionType getType();
 
-	private ConditionType type;
-	
-	public ConditionType getType() { return this.type; }
+	public default Condition and(Condition condition) {
+		return new CompoundCondition(ConditionType.AND, condition);
+	}
+
+	public default Condition or(Condition condition) {
+		return new CompoundCondition(ConditionType.OR, condition);
+	}
+
+	public default Condition not() {
+		return new UnaryCondition(ConditionType.UNARY_NOT, this);
+	}
 }

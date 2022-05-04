@@ -11,5 +11,9 @@ public enum ConditionType {
 	LESS_THAN_EQUAL,
 	GREATER_THAN_EQUAL,
 	UNARY_NOT,
+	IN,
+	STARTS_WITH,
+	ENDS_WITH,
+	CONTAINS,
 	;
 }

@@ -39,7 +39,7 @@ public class DataService {
 		
 		ITable tenantTable = masterData.getTable(CoreConstants.NAMESPACE_CORE, Tenant.SCHEMA.getId());
 		
-//		tenantTable.find(Condition)
+		tenantTable.find(Condition)
 		
 		return Mono.just(masterData);
 	}

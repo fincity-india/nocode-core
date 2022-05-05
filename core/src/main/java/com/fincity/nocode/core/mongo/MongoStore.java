@@ -2,36 +2,48 @@ package com.fincity.nocode.core.mongo;
 
 import org.springframework.data.domain.Page;
 
-import com.fincity.nocode.core.db.ITable;
+import com.fincity.nocode.core.db.IStore;
+import com.fincity.nocode.core.exception.CoreException;
+import com.fincity.nocode.core.system.tenant.Store;
+import com.fincity.nocode.kirun.engine.json.schema.Schema;
+import com.fincity.nocode.kirun.engine.json.schema.type.SchemaType;
 import com.google.gson.JsonObject;
 
 import reactor.core.publisher.Mono;
 
-public class MongoTable implements ITable {
+public class MongoStore implements IStore {
 
-	private MongoData mongoData;
-	private String table;
-	private String namespace;
+	private MongoBase mongoData;
+	private Schema schema;
+	private Store store;
 	private String collectionName;
 
-	public MongoTable(MongoData mongoData, String namespace, String table, String cName) {
+	public MongoStore(MongoBase mongoData, Schema schema, Store store, String cName) {
+
+		if (schema == null || schema.getType() == null || schema.getType().getAllowedSchemaTypes().size() != 1
+				|| !schema.getType().getAllowedSchemaTypes().contains(SchemaType.OBJECT))
+			throw new CoreException("Expected an object type schema and received : " + schema);
+		
+		if (cName == null || cName.isBlank())
+			throw new CoreException("Collection for a Mongo DB Store cannot be null or blank");
 
 		this.mongoData = mongoData;
-		this.table = table;
-		this.namespace = namespace;
+		this.schema = schema;
+		this.store = store;
 		this.collectionName = cName;
 	}
 
-	public MongoData getMongoData() {
+	public MongoBase getMongoData() {
 		return mongoData;
 	}
 
-	public String getTable() {
-		return table;
+	@Override
+	public Schema getSchema() {
+		return schema;
 	}
 
-	public String getNamespace() {
-		return namespace;
+	public Store getStore() {
+		return store;
 	}
 
 	public String getCollectionName() {

@@ -14,40 +14,40 @@ import com.fincity.nocode.core.system.tenant.Tenant;
 
 import reactor.core.publisher.Mono;
 
-@Service(DataService.SERVICE_NAME)
-public class DataService {
+@Service(DataBaseService.SERVICE_NAME)
+public class DataBaseService {
 
 	public static final String SERVICE_NAME = "dataService";
 
-	public static final Logger logger = LoggerFactory.getLogger(DataService.class);
+	public static final Logger logger = LoggerFactory.getLogger(DataBaseService.class);
 
 	@Autowired
 	private MultitenantMongoConnectionService connectionService;
 	
 	@Autowired
-	private IData masterData;
+	private IBase masterData;
 	
-	private Map<String, IData> data = new ConcurrentHashMap<>();
+	private Map<String, IBase> data = new ConcurrentHashMap<>();
 	
 	public void postConstructor() {
 		data.put(masterData.getTenant(), masterData);
 	}
 
-	public Mono<IData> getData(String tenant) {
+	public Mono<IBase> getBase(String tenant) {
 		
 		if (data.containsKey(tenant)) return Mono.just(data.get(tenant));
 		
-		ITable tenantTable = masterData.getTable(CoreConstants.NAMESPACE_CORE, Tenant.SCHEMA.getId());
+		IStore masterTenantStore = masterData.getStore(Tenant.SCHEMA);
 		
 //		tenantTable.find(Condition)
 		
 		return Mono.just(masterData);
 	}
 
-	public Mono<ITable> getTable(String tenant, String namespace, String table) {
+	public Mono<IStore> getStore(String tenant, String namespace, String store) {
 
 		// Don't give the table directly. Check in the data table if there is a different connection that is used.
 		// That gives the flexibility for connecting to other databases for just one table.
-		return this.getData(tenant).map(e -> e.getTable(namespace, table));
+		return this.getBase(tenant).map(e -> e.getTable(namespace, table));
 	}
 }

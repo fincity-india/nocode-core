@@ -7,7 +7,7 @@ import com.google.gson.JsonObject;
 
 import reactor.core.publisher.Mono;
 
-public interface ITable {
+public interface IStore {
 	
 	public Schema getSchema();
 

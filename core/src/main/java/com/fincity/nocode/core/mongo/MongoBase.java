@@ -3,17 +3,17 @@ package com.fincity.nocode.core.mongo;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import com.fincity.nocode.core.db.IData;
-import com.fincity.nocode.core.db.ITable;
+import com.fincity.nocode.core.db.IBase;
+import com.fincity.nocode.core.db.IStore;
 import com.mongodb.reactivestreams.client.MongoDatabase;
 
-public class MongoData implements IData {
+public class MongoBase implements IBase {
 
 	private MongoDatabase db;
 	private String tenant;
-	private Map<String, ITable> tables = new ConcurrentHashMap<>();
+	private Map<String, IStore> tables = new ConcurrentHashMap<>();
 
-	public MongoData(String tenant, MongoDatabase db) {
+	public MongoBase(String tenant, MongoDatabase db) {
 
 		this.db = db;
 		this.tenant = tenant;
@@ -30,10 +30,10 @@ public class MongoData implements IData {
 	}
 
 	@Override
-	public ITable getTable(final String namespace, final String name) {
+	public IStore getTable(final String namespace, final String name) {
 
 		final var cName = this.getCollectionName(namespace, name);
-		tables.computeIfAbsent(cName, k -> tables.put(cName, new MongoTable(this, namespace, name, k)));
+		tables.computeIfAbsent(cName, k -> tables.put(cName, new MongoStore(this, namespace, name, k)));
 
 		return tables.get(cName);
 	}

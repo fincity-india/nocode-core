@@ -30,7 +30,7 @@ public class MongoBase implements IBase {
 	}
 
 	@Override
-	public IStore getTable(final String namespace, final String name) {
+	public IStore getStore(final String namespace, final String name) {
 
 		final var cName = this.getCollectionName(namespace, name);
 		tables.computeIfAbsent(cName, k -> tables.put(cName, new MongoStore(this, namespace, name, k)));

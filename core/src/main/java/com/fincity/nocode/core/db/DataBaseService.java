@@ -48,6 +48,6 @@ public class DataBaseService {
 
 		// Don't give the table directly. Check in the data table if there is a different connection that is used.
 		// That gives the flexibility for connecting to other databases for just one table.
-		return this.getBase(tenant).map(e -> e.getTable(namespace, table));
+		return this.getBase(tenant).map(e -> e.getTable(namespace, store));
 	}
 }

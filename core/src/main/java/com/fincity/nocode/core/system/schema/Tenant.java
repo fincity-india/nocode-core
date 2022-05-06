@@ -1,4 +1,4 @@
-package com.fincity.nocode.core.system.tenant;
+package com.fincity.nocode.core.system.schema;
 
 import static com.fincity.nocode.kirun.engine.json.schema.type.SchemaType.LONG;
 import static com.fincity.nocode.kirun.engine.json.schema.type.SchemaType.OBJECT;
@@ -8,9 +8,9 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 
-import com.fincity.nocode.core.configuration.MongoDBCProperties;
-import com.fincity.nocode.core.configuration.R2DBCProperties;
 import com.fincity.nocode.core.system.CoreConstants;
+import com.fincity.nocode.core.system.schema.connection.MongoDBCProperties;
+import com.fincity.nocode.core.system.schema.connection.R2DBCProperties;
 import com.fincity.nocode.kirun.engine.json.schema.Schema;
 import com.fincity.nocode.kirun.engine.json.schema.type.SingleType;
 import com.google.gson.JsonPrimitive;
@@ -40,16 +40,9 @@ public class Tenant implements Serializable {
 
 	private String code;
 	private String name;
-	private ConnectionType type;
-	private MongoDBCProperties mongo;
-	private R2DBCProperties r2dbc;
+
 	private Long createdAt;
 	private String createdBy;
 	private Long updatedAt;
 	private String updatedBy;
-
-	public enum ConnectionType {
-
-		MONGO, R2DBC,;
-	}
 }

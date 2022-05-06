@@ -1,7 +1,7 @@
 package com.fincity.nocode.core.db;
 
 import com.fincity.nocode.core.NocodeException;
-import com.fincity.nocode.core.configuration.R2DBCProperties;
+import com.fincity.nocode.core.system.schema.connection.R2DBCProperties;
 
 public class R2DBCBase { // should implement IData when created to support SQL databases.
 

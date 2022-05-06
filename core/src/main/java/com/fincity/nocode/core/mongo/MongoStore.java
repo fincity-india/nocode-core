@@ -4,7 +4,7 @@ import org.springframework.data.domain.Page;
 
 import com.fincity.nocode.core.db.IStore;
 import com.fincity.nocode.core.exception.CoreException;
-import com.fincity.nocode.core.system.tenant.Store;
+import com.fincity.nocode.core.system.schema.Store;
 import com.fincity.nocode.kirun.engine.json.schema.Schema;
 import com.fincity.nocode.kirun.engine.json.schema.type.SchemaType;
 import com.google.gson.JsonObject;

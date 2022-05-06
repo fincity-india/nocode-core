@@ -3,6 +3,9 @@ package com.fincity.nocode.core.configuration;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
+import com.fincity.nocode.core.system.schema.connection.MongoDBCProperties;
+import com.fincity.nocode.core.system.schema.connection.R2DBCProperties;
+
 import lombok.Data;
 
 @Configuration

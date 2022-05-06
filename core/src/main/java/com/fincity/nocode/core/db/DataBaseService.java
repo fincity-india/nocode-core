@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.fincity.nocode.core.mongo.MultitenantMongoConnectionService;
 import com.fincity.nocode.core.system.CoreConstants;
-import com.fincity.nocode.core.system.tenant.Tenant;
+import com.fincity.nocode.core.system.schema.Tenant;
 
 import reactor.core.publisher.Mono;
 

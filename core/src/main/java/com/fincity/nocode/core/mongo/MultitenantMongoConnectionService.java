@@ -9,7 +9,7 @@ import org.springframework.beans.factory.DisposableBean;
 import org.springframework.stereotype.Service;
 
 import com.fincity.nocode.core.NocodeException;
-import com.fincity.nocode.core.configuration.MongoDBCProperties;
+import com.fincity.nocode.core.system.schema.connection.MongoDBCProperties;
 import com.mongodb.ConnectionString;
 import com.mongodb.reactivestreams.client.MongoClient;
 import com.mongodb.reactivestreams.client.MongoClients;

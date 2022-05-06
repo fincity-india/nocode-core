@@ -1,4 +1,4 @@
-package com.fincity.nocode.core.system.tenant;
+package com.fincity.nocode.core.system.schema;
 
 import static com.fincity.nocode.kirun.engine.json.schema.type.SchemaType.BOOLEAN;
 import static com.fincity.nocode.kirun.engine.json.schema.type.SchemaType.LONG;
@@ -9,8 +9,6 @@ import static java.util.Map.entry;
 import java.io.Serializable;
 import java.util.Map;
 
-import com.fincity.nocode.core.configuration.MongoDBCProperties;
-import com.fincity.nocode.core.configuration.R2DBCProperties;
 import com.fincity.nocode.core.system.CoreConstants;
 import com.fincity.nocode.kirun.engine.json.schema.Schema;
 import com.fincity.nocode.kirun.engine.json.schema.type.SingleType;

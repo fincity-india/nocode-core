@@ -3,6 +3,7 @@ package com.fincity.nocode.core.db;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.util.MultiValueMap;
 
 import com.fincity.nocode.core.db.condition.Condition;
 import com.fincity.nocode.kirun.engine.json.schema.Schema;
@@ -19,6 +20,10 @@ public interface IStore {
 
 	public Mono<JsonObject> getById(String id);
 
+	public Mono<Page<JsonObject>> filter(MultiValueMap<String, String> parameters);
+	
+	public Mono<Page<JsonObject>> filter(JsonObject filter);
+	
 	public Mono<Page<JsonObject>> filter(Condition condition, Pageable pageable);
 	
 	public Flux<JsonObject> filter(Condition condition, Sort sort);
@@ -30,4 +35,6 @@ public interface IStore {
 	public Mono<JsonObject> deleteById(String id);
 
 	public Mono<Integer> deleteByFilter(Condition condition);
+
+	public Mono<Integer> deleteByFilter(JsonObject filter);
 }

@@ -18,8 +18,6 @@ import com.mongodb.reactivestreams.client.MongoDatabase;
 @Service
 public class MultitenantMongoConnectionService implements DisposableBean {
 
-	public static final String MASTER_TENANT = "master";
-
 	private static final Logger logger = LoggerFactory.getLogger(MultitenantMongoConnectionService.class);
 
 	private Map<String, MongoClient> tenants = new HashMap<>();

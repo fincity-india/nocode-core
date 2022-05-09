@@ -7,7 +7,7 @@ import com.fincity.nocode.core.db.condition.Condition;
 import com.fincity.nocode.kirun.engine.json.schema.type.SchemaType;
 import com.google.gson.JsonPrimitive;
 
-public interface Field extends Serializable {
+public interface IField extends Serializable {
 
 	public String getName();
 
@@ -25,17 +25,17 @@ public interface Field extends Serializable {
 
 	public Condition greaterThanOrEqual(JsonPrimitive value);
 
-	public Condition equalTo(Field value);
+	public Condition equalTo(IField value);
 
-	public Condition notEqualTo(Field value);
+	public Condition notEqualTo(IField value);
 
-	public Condition lessThan(Field value);
+	public Condition lessThan(IField value);
 
-	public Condition lessThanOrEqual(Field value);
+	public Condition lessThanOrEqual(IField value);
 
-	public Condition greaterThan(Field value);
+	public Condition greaterThan(IField value);
 
-	public Condition greaterThanOrEqual(Field value);
+	public Condition greaterThanOrEqual(IField value);
 
 	public Condition in(List<JsonPrimitive> values);
 	

@@ -56,7 +56,7 @@ public class StringField extends AbstractTableField {
 	}
 
 	@Override
-	protected Condition getCondition(ConditionType conditionType, Field value) {
+	protected Condition getCondition(ConditionType conditionType, IField value) {
 
 		return new StringCondition(conditionType, this, value);
 	}

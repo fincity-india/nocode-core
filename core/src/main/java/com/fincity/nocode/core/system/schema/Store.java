@@ -32,6 +32,7 @@ public class Store implements Serializable {
 					entry("writePermission", Schema.of("writePermission", STRING)),
 					entry("updatePermission", Schema.of("updatePermission", STRING)),
 					entry("deletePermission", Schema.of("deletePermission", STRING)),
+					entry("connectionId", Schema.of("connectionId", STRING)),
 					entry("versioned", Schema.of("versioned", BOOLEAN)),
 					entry("softDelete", Schema.of("softDelete", BOOLEAN)),
 					entry("audited", Schema.of("audited", BOOLEAN)), entry("createdAt", Schema.of("createdAt", LONG)),
@@ -53,6 +54,7 @@ public class Store implements Serializable {
 	private String writePermission;
 	private String updatePermission;
 	private String deletePermission;
+	private String connectionId;
 	private boolean versioned = false;
 	private boolean audited = false;
 	private boolean softDelete = false;

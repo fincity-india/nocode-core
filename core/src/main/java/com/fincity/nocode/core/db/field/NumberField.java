@@ -48,7 +48,7 @@ public class NumberField extends AbstractTableField {
 	}
 
 	@Override
-	protected Condition getCondition(ConditionType conditionType, Field value) {
+	protected Condition getCondition(ConditionType conditionType, IField value) {
 
 		return new NumberCondition(conditionType, this, value);
 	}

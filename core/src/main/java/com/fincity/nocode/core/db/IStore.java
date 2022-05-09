@@ -6,6 +6,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.util.MultiValueMap;
 
 import com.fincity.nocode.core.db.condition.Condition;
+import com.fincity.nocode.core.db.field.IField;
+import com.fincity.nocode.core.db.request.FilterRequest;
 import com.fincity.nocode.kirun.engine.json.schema.Schema;
 import com.google.gson.JsonObject;
 
@@ -22,9 +24,11 @@ public interface IStore {
 
 	public Mono<Page<JsonObject>> filter(MultiValueMap<String, String> parameters);
 	
-	public Mono<Page<JsonObject>> filter(JsonObject filter);
+	public Mono<Page<JsonObject>> filter(FilterRequest filter);
 	
 	public Mono<Page<JsonObject>> filter(Condition condition, Pageable pageable);
+	
+	public Flux<JsonObject> filter(Condition condition);
 	
 	public Flux<JsonObject> filter(Condition condition, Sort sort);
 
@@ -36,5 +40,7 @@ public interface IStore {
 
 	public Mono<Integer> deleteByFilter(Condition condition);
 
-	public Mono<Integer> deleteByFilter(JsonObject filter);
+	public Mono<Integer> deleteByFilter(FilterRequest filter);
+	
+	public IField getField(String fieldName);
 }

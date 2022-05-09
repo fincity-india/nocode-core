@@ -32,6 +32,13 @@ public class Tenant implements Serializable {
 					"createdBy", Schema.of("createdBy", STRING),
 					"updatedAt", Schema.of("updatedAt", LONG),
 					"updatedBy", Schema.of("updatedBy", STRING)));
+	
+	public static final Store STORE_RECORD = new Store().setAudited(true).setVersioned(true).setSoftDelete(true)
+			.setNamespace(CoreConstants.NAMESPACE_CORE)
+			.setName(SCHEMA_NAME)
+			.setWritePermission(CoreConstants.PERMISSION_ADMIN)
+			.setUpdatePermission(CoreConstants.PERMISSION_ADMIN)
+			.setDeletePermission(CoreConstants.PERMISSION_ADMIN);
 
 	private String id;
 	private String code;

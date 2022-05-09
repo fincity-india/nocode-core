@@ -7,7 +7,7 @@ import com.fincity.nocode.core.db.condition.ConditionType;
 import com.fincity.nocode.core.db.condition.InCondition;
 import com.google.gson.JsonPrimitive;
 
-public abstract class AbstractTableField implements Field {
+public abstract class AbstractTableField implements IField {
 
 	private static final long serialVersionUID = 8705867846156922835L;
 
@@ -35,27 +35,27 @@ public abstract class AbstractTableField implements Field {
 		return getCondition(ConditionType.GREATER_THAN_EQUAL, value);
 	}
 
-	public Condition equalTo(Field value) {
+	public Condition equalTo(IField value) {
 		return getCondition(ConditionType.EQUAL, value);
 	}
 
-	public Condition notEqualTo(Field value) {
+	public Condition notEqualTo(IField value) {
 		return getCondition(ConditionType.NOT_EQUAL, value);
 	}
 
-	public Condition lessThan(Field value) {
+	public Condition lessThan(IField value) {
 		return getCondition(ConditionType.LESS_THAN, value);
 	}
 
-	public Condition lessThanOrEqual(Field value) {
+	public Condition lessThanOrEqual(IField value) {
 		return getCondition(ConditionType.LESS_THAN_EQUAL, value);
 	}
 
-	public Condition greaterThan(Field value) {
+	public Condition greaterThan(IField value) {
 		return getCondition(ConditionType.GREATER_THAN, value);
 	}
 
-	public Condition greaterThanOrEqual(Field value) {
+	public Condition greaterThanOrEqual(IField value) {
 		return getCondition(ConditionType.GREATER_THAN_EQUAL, value);
 	}
 	
@@ -69,5 +69,5 @@ public abstract class AbstractTableField implements Field {
 
 	protected abstract Condition getCondition(ConditionType conditionType, JsonPrimitive value) ;
 
-	protected abstract Condition getCondition(ConditionType conditionType, Field value) ;
+	protected abstract Condition getCondition(ConditionType conditionType, IField value) ;
 }

@@ -6,6 +6,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import com.fincity.nocode.core.mongo.MultitenantMongoConnectionService;
@@ -25,12 +26,13 @@ public class DataBaseService {
 	private MultitenantMongoConnectionService connectionService;
 	
 	@Autowired
-	private IBase masterData;
+	@Qualifier(CoreConstants.BASE_MASTER)
+	private IBase masterBase;
 	
 	private Map<String, IBase> data = new ConcurrentHashMap<>();
 	
 	public void postConstructor() {
-		data.put(masterData.getTenant(), masterData);
+		data.put(masterBase.getTenant(), masterBase);
 	}
 
 	public Mono<IBase> getBase(String tenant) {
@@ -39,7 +41,7 @@ public class DataBaseService {
 		
 		IStore masterTenantStore = masterData.getStore(Tenant.SCHEMA);
 		
-//		tenantTable.find(Condition)
+		masterTenantStore.filter(, null)
 		
 		return Mono.just(masterData);
 	}
@@ -48,6 +50,6 @@ public class DataBaseService {
 
 		// Don't give the table directly. Check in the data table if there is a different connection that is used.
 		// That gives the flexibility for connecting to other databases for just one table.
-		return this.getBase(tenant).map(e -> e.getTable(namespace, store));
+		return this.getBase(tenant).map(e -> e.getStore(namespace, store));
 	}
 }

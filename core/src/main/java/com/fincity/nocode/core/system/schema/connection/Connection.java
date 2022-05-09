@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.stream.Stream;
 
 import com.fincity.nocode.core.system.CoreConstants;
+import com.fincity.nocode.core.system.schema.Store;
 import com.fincity.nocode.kirun.engine.json.schema.Schema;
 import com.fincity.nocode.kirun.engine.json.schema.type.SingleType;
 import com.google.gson.JsonElement;
@@ -30,6 +31,13 @@ public class Connection implements Serializable {
 							.map(JsonPrimitive::new).map(JsonElement.class::cast).toList()),
 					"props", Schema.of("props", OBJECT).setAnyOf(List.of(MongoDBCProperties.SCHEMA, R2DBCProperties.SCHEMA))
 					));
+	
+	public static final Store STORE_RECORD = new Store().setAudited(true).setVersioned(true).setSoftDelete(true)
+			.setNamespace(CoreConstants.NAMESPACE_CORE)
+			.setName(SCHEMA_NAME)
+			.setWritePermission(CoreConstants.PERMISSION_ADMIN)
+			.setUpdatePermission(CoreConstants.PERMISSION_ADMIN)
+			.setDeletePermission(CoreConstants.PERMISSION_ADMIN);
 
 	private String id;
 	private ConnectionType type;

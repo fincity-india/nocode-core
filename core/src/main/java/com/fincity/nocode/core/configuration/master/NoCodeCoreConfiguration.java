@@ -8,6 +8,7 @@ import com.fincity.nocode.core.configuration.MasterDBConfigurationProperties;
 import com.fincity.nocode.core.db.IBase;
 import com.fincity.nocode.core.mongo.MongoBase;
 import com.fincity.nocode.core.mongo.MultitenantMongoConnectionService;
+import com.fincity.nocode.core.system.CoreConstants;
 
 public abstract class NoCodeCoreConfiguration {
 
@@ -17,14 +18,13 @@ public abstract class NoCodeCoreConfiguration {
 	@Autowired
 	private MultitenantMongoConnectionService mongoService;
 
-	@Bean(name = "masterData")
-	public IBase getMasterData() {
+	@Bean(name = CoreConstants.BASE_MASTER)
+	public IBase getMasterStore() {
 
 		if (masterDBProps.getMongo() != null) {
 
-			mongoService.createConnection(MultitenantMongoConnectionService.MASTER_TENANT, masterDBProps.getMongo());
-			return new MongoBase(MultitenantMongoConnectionService.MASTER_TENANT,
-					mongoService.getDatabase(MultitenantMongoConnectionService.MASTER_TENANT));
+			mongoService.createConnection(CoreConstants.TENANT_MASTER, masterDBProps.getMongo());
+			return new MongoBase(CoreConstants.TENANT_MASTER, mongoService.getDatabase(CoreConstants.TENANT_MASTER));
 		} // Add the r2dbc connection.
 
 		throw new NocodeException(1, "Unable to find the master DB configuration");

@@ -21,7 +21,7 @@ public class Tenant implements Serializable {
 	private static final String SCHEMA_NAME = "Tenant";
 
 	public static final Schema SCHEMA = new Schema().setType(new SingleType(OBJECT))
-			.setNamespace(CoreConstants.NAMESPACE_CORE).setId(SCHEMA_NAME).setTitle(SCHEMA_NAME)
+			.setNamespace(CoreConstants.NAMESPACE_CORE).setName(SCHEMA_NAME).setTitle(SCHEMA_NAME)
 			.setVersion(1)
 			.setProperties(Map.of(
 					"id", Schema.of("id", STRING),

@@ -1,6 +1,7 @@
 package com.fincity.nocode.core.mongo;
 
-import static com.fincity.nocode.kirun.engine.constant.KIRUNConstants.*;
+import static com.fincity.nocode.kirun.engine.constant.KIRunConstants.NAME;
+import static com.fincity.nocode.kirun.engine.constant.KIRunConstants.NAMESPACE;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -12,8 +13,8 @@ import com.fincity.nocode.core.system.schema.CoreSchema;
 import com.fincity.nocode.core.system.schema.Store;
 import com.fincity.nocode.core.system.schema.Tenant;
 import com.fincity.nocode.core.system.schema.connection.Connection;
-import com.fincity.nocode.kirun.engine.constant.KIRUNConstants;
 import com.fincity.nocode.kirun.engine.json.schema.Schema;
+import com.google.gson.Gson;
 import com.google.gson.JsonPrimitive;
 import com.mongodb.reactivestreams.client.MongoDatabase;
 
@@ -59,29 +60,64 @@ public class MongoBase implements IBase {
 	@Override
 	public Mono<IStore> getStore(final String namespace, final String storeName) {
 
-		IStore schemaStore = this.getStore(Schema.SCHEMA);
-		schemaStore.filter(schemaStore.getField(NAMESPACE).equalTo(new JsonPrimitive(namespace))
-				.and(schemaStore.getField(ID).equalTo(new JsonPrimitive(storeName)))).next().map(Schema);
+		final String cName = this.getCollectionName(namespace, storeName);
+
+		IStore schemaStore = this.tables.get(this.getCollectionName(Schema.SCHEMA));
+
+		Gson gson = new Gson();
+
+		Mono<Schema> schema = schemaStore
+				.filter(schemaStore.getField(NAMESPACE).equalTo(new JsonPrimitive(namespace))
+						.and(schemaStore.getField(NAME).equalTo(new JsonPrimitive(storeName))))
+				.next().map(e -> gson.fromJson(e, Schema.class));
+
+		IStore storeStore = this.tables.get(this.getCollectionName(Store.SCHEMA));
+
+		Mono<Store> store = storeStore
+				.filter(storeStore.getField(NAMESPACE).equalTo(new JsonPrimitive(namespace))
+						.and(storeStore.getField(NAME).equalTo(new JsonPrimitive(storeName))))
+				.next().map(e -> gson.fromJson(e, Store.class));
+		
+		return schema.flatMap(sch -> store.map(sto -> new MongoStore(this, sch, sto, cName)));
+	}
+
+	private String getCollectionName(String namespace, String storeName) {
+		return this.tenant + "_" + namespace + "_" + storeName;
 	}
 
 	private String getCollectionName(Schema schema) {
-		return this.tenant + "_" + schema.getNamespace() + "_" + schema.getId();
+		return this.tenant + "_" + schema.getNamespace() + "_" + schema.getName();
 	}
 
 	@Override
-	public IStore getStore(Schema s) {
+	public Mono<IStore> getStore(Schema s) {
 
-		final var cName = this.getCollectionName(s.getNamespace(), s.getId());
+		final String cName = this.getCollectionName(s);
 
 		if (tables.containsKey(cName))
-			return this.tables.get(cName);
+			return Mono.just(this.tables.get(cName));
 
-//		this.getStore(Store.SCHEMA)
+		IStore storeStore = this.tables.get(this.getCollectionName(Store.SCHEMA));
+
+		Gson gson = new Gson();
+
+		Mono<Store> store = storeStore
+				.filter(storeStore.getField(NAMESPACE).equalTo(new JsonPrimitive(s.getNamespace()))
+						.and(storeStore.getField(NAME).equalTo(new JsonPrimitive(s.getName()))))
+				.next().map(e -> gson.fromJson(e, Store.class));
+
+		return store.map(e -> this.getStore(cName, s, e));
 	}
 
 	private IStore getStore(String cName, Schema schema, Store store) {
 
 		tables.put(cName, new MongoStore(this, schema, store, cName));
 		return tables.get(cName);
+	}
+	
+	@Override
+	public Mono<IBase> copy(String tenant) {
+	
+		return Mono.just(new MongoBase(tenant, this.db));
 	}
 }

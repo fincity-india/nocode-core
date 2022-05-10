@@ -25,7 +25,7 @@ public class Store implements Serializable {
 	private static final String SCHEMA_NAME = "Store";
 
 	public static final Schema SCHEMA = new Schema().setType(new SingleType(OBJECT))
-			.setNamespace(CoreConstants.NAMESPACE_CORE).setId(SCHEMA_NAME).setTitle(SCHEMA_NAME).setVersion(1)
+			.setNamespace(CoreConstants.NAMESPACE_CORE).setName(SCHEMA_NAME).setTitle(SCHEMA_NAME).setVersion(1)
 			.setProperties(Map.ofEntries(entry("namespace", Schema.of("namespace", STRING)),
 					entry("id", Schema.of("id", STRING)), entry("readPermission", Schema.of("readPermission", STRING)),
 					entry("name", Schema.of("name", STRING)),

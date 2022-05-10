@@ -24,7 +24,7 @@ public class MultitenantMongoConnectionService implements DisposableBean {
 
 	private Map<String, MongoDatabase> databases = new HashMap<>();
 
-	public MongoClient createConnection(String tenant, MongoDBCProperties properties) {
+	public MongoDatabase createConnection(String tenant, MongoDBCProperties properties) {
 
 		logger.debug("Creating connection for {}", tenant);
 
@@ -38,7 +38,7 @@ public class MultitenantMongoConnectionService implements DisposableBean {
 			tenants.put(tenant, client);
 			databases.put(tenant, db);
 
-			return client;
+			return db;
 		} catch (Exception ex) {
 
 			var nce = new NocodeException(3, "Unable to create a connection to DB", ex);
@@ -47,6 +47,11 @@ public class MultitenantMongoConnectionService implements DisposableBean {
 
 			throw nce;
 		}
+	}
+	
+	public MongoClient getMongoClient(String tenant) {
+		
+		return tenants.get(tenant);
 	}
 
 	public MongoDatabase getDatabase(String tenant) {

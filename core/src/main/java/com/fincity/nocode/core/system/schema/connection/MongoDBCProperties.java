@@ -17,7 +17,7 @@ public class MongoDBCProperties implements IConnectionProperties {
 
 	public static final String SCHEMA_NAME = "MongoDBCProperties";
 
-	public static final Schema SCHEMA = new Schema().setTitle(SCHEMA_NAME).setId(SCHEMA_NAME)
+	public static final Schema SCHEMA = new Schema().setTitle(SCHEMA_NAME).setName(SCHEMA_NAME)
 			.setNamespace(CoreConstants.NAMESPACE_CORE).setType(new SingleType(SchemaType.OBJECT))
 			.setProperties(Map.of("uri", Schema.of("uri", SchemaType.STRING)));
 

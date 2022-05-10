@@ -22,7 +22,7 @@ public class R2DBCProperties implements IConnectionProperties {
 
 	public static final String SCHEMA_NAME = "R2DBCProperties";
 
-	public static final Schema SCHEMA = new Schema().setTitle(SCHEMA_NAME).setId(SCHEMA_NAME)
+	public static final Schema SCHEMA = new Schema().setTitle(SCHEMA_NAME).setName(SCHEMA_NAME)
 			.setNamespace(CoreConstants.NAMESPACE_CORE).setType(new SingleType(OBJECT))
 			.setProperties(Map.of(
 					"name", Schema.of("name", STRING),

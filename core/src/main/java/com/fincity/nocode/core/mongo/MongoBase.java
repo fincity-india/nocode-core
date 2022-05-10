@@ -33,6 +33,9 @@ public class MongoBase implements IBase {
 
 		String cName = this.getCollectionName(Schema.SCHEMA);
 		tables.put(cName, new MongoStore(this, Schema.SCHEMA, CoreSchema.STORE_RECORD, cName));
+		
+		cName = this.getCollectionName(Connection.SCHEMA);
+		tables.put(cName, new MongoStore(this, Connection.SCHEMA, Connection.STORE_RECORD, cName));
 
 		cName = this.getCollectionName(Store.SCHEMA);
 		tables.put(cName, new MongoStore(this, Store.SCHEMA, Store.STORE_RECORD, cName));
@@ -42,9 +45,6 @@ public class MongoBase implements IBase {
 			cName = this.getCollectionName(Tenant.SCHEMA);
 			tables.put(cName, new MongoStore(this, Tenant.SCHEMA, Tenant.STORE_RECORD, cName));
 		}
-
-		cName = this.getCollectionName(Connection.SCHEMA);
-		tables.put(cName, new MongoStore(this, Connection.SCHEMA, Connection.STORE_RECORD, cName));
 	}
 
 	@Override

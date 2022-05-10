@@ -2,6 +2,8 @@ package com.fincity.nocode.core.mongo;
 
 import static com.fincity.nocode.kirun.engine.json.schema.type.SchemaType.*;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -26,6 +28,8 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 public class MongoStore implements IStore {
+	
+	private static final Logger logger = LoggerFactory.getLogger(MongoStore.class);
 
 	private MongoBase mongoData;
 	private Schema schema;
@@ -45,6 +49,13 @@ public class MongoStore implements IStore {
 		this.schema = schema;
 		this.store = store;
 		this.collectionName = cName;
+		
+		long count = Flux.from(mongoData.getDb().listCollectionNames()).filter(c -> c.equals(cName)).count().block();
+		
+		if (count != 0l)
+			return;
+		
+		mongoData.getDb().createCollection();
 	}
 
 	public MongoBase getMongoData() {
@@ -154,6 +165,12 @@ public class MongoStore implements IStore {
 
 	@Override
 	public Mono<Integer> deleteByFilter(FilterRequest filter) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Flux<JsonObject> filter(Condition condition) {
 		// TODO Auto-generated method stub
 		return null;
 	}

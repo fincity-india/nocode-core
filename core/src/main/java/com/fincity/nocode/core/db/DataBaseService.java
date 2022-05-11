@@ -14,10 +14,12 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import com.fincity.nocode.core.system.CoreConstants;
+import com.fincity.nocode.core.system.db.mongo.ConnectionMongoStore;
+import com.fincity.nocode.core.system.db.mongo.StoreMongoStore;
+import com.fincity.nocode.core.system.db.mongo.TenantMongoStore;
 import com.fincity.nocode.core.system.schema.Store;
 import com.fincity.nocode.core.system.schema.Tenant;
 import com.fincity.nocode.core.system.schema.connection.Connection;
-import com.google.gson.Gson;
 import com.google.gson.JsonPrimitive;
 
 import reactor.core.publisher.Mono;
@@ -51,13 +53,11 @@ public class DataBaseService {
 
 		Mono<IStore> mConnectionStore = masterBase.getStore(Connection.SCHEMA);
 
-		Gson gson = new Gson();
-
 		return mTenantStore
 				// Get Tenant Object
+				.map(TenantMongoStore.class::cast)
 				.flatMap(tenantStore -> tenantStore
 						.filter(tenantStore.getField("code").equalTo(new JsonPrimitive(tenant))).next())
-				.map(jTenant -> gson.fromJson(jTenant, Tenant.class))
 				// Get Connection Id
 				.map(Tenant::getConnectionId)
 				.flatMap(cid -> getBaseFromConnectionId(tenant, mConnectionStore, cid, masterBase)).map(base -> {
@@ -77,10 +77,9 @@ public class DataBaseService {
 		if (this.bases.containsKey(tenant_cid))
 			return Mono.just(this.bases.get(tenant_cid));
 
-		return mConnectionStore
+		return mConnectionStore.map(ConnectionMongoStore.class::cast)
 				.flatMap(connectionStore -> connectionStore
 						.filter(connectionStore.getField(ID).equalTo(new JsonPrimitive(cid))).next())
-				.map(Connection::from)
 				// Create Connection based on the properties
 				.map(connection -> connectionService.createBase(tenant, connection.getProps())).map(base -> {
 					this.bases.put(tenant_cid, base);
@@ -92,12 +91,10 @@ public class DataBaseService {
 
 		Mono<IBase> mTenantBase = this.getBase(tenant);
 
-		Gson gson = new Gson();
-
-		return mTenantBase.flatMap(b -> b.getStore(Store.SCHEMA))
+		return mTenantBase.flatMap(b -> b.getStore(Store.SCHEMA)).map(StoreMongoStore.class::cast)
 				.flatMap(s -> s.filter(s.getField(NAMESPACE).equalTo(new JsonPrimitive(namespace))
 						.and(s.getField(NAME).equalTo(new JsonPrimitive(storeName)))).next())
-				.map(jStore -> gson.fromJson(jStore, Store.class)).flatMap(sStore -> {
+				.flatMap(sStore -> {
 
 					if (sStore.getConnectionId() == null)
 						return mTenantBase;

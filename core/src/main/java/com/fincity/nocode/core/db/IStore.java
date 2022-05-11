@@ -2,7 +2,6 @@ package com.fincity.nocode.core.db;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.util.MultiValueMap;
 
 import com.fincity.nocode.core.db.condition.Condition;
@@ -11,7 +10,6 @@ import com.fincity.nocode.core.db.request.FilterRequest;
 import com.fincity.nocode.kirun.engine.json.schema.Schema;
 import com.google.gson.JsonObject;
 
-import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 public interface IStore {
@@ -27,10 +25,6 @@ public interface IStore {
 	public Mono<Page<JsonObject>> filter(FilterRequest filter);
 	
 	public Mono<Page<JsonObject>> filter(Condition condition, Pageable pageable);
-	
-	public Flux<JsonObject> filter(Condition condition);
-	
-	public Flux<JsonObject> filter(Condition condition, Sort sort);
 
 	public Mono<JsonObject> update(JsonObject obj);
 

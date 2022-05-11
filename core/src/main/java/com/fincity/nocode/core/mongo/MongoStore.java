@@ -7,14 +7,19 @@ import static com.fincity.nocode.kirun.engine.json.schema.type.SchemaType.INTEGE
 import static com.fincity.nocode.kirun.engine.json.schema.type.SchemaType.LONG;
 import static com.fincity.nocode.kirun.engine.json.schema.type.SchemaType.STRING;
 
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
+import org.springframework.data.mongodb.core.index.Index;
 import org.springframework.util.MultiValueMap;
 
 import com.fincity.nocode.core.db.IStore;
+import com.fincity.nocode.core.db.Key;
 import com.fincity.nocode.core.db.condition.Condition;
 import com.fincity.nocode.core.db.field.BooleanField;
 import com.fincity.nocode.core.db.field.IField;
@@ -28,9 +33,7 @@ import com.fincity.nocode.kirun.engine.json.schema.Schema;
 import com.fincity.nocode.kirun.engine.json.schema.type.SchemaType;
 import com.fincity.nocode.kirun.engine.json.schema.type.SingleType;
 import com.google.gson.JsonObject;
-import com.mongodb.client.model.Indexes;
 
-import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 public class MongoStore implements IStore {
@@ -55,24 +58,42 @@ public class MongoStore implements IStore {
 		this.schema = schema;
 		this.store = store;
 		this.collectionName = cName;
+	}
 
-		long count = Flux.from(mongoData.getDb().listCollectionNames()).filter(c -> c.equals(cName)).count().block();
+	public MongoStore checkInitialization() {
 
-		if (count != 0l) {
+		ReactiveMongoTemplate template = mongoData.getTemplate();
 
+		boolean exists = template.collectionExists(this.collectionName).block();
+		if (exists) {
 			logger.debug("Collection {} exists for tenant {}", this.collectionName, this.getMongoData().getTenant());
-			return;
+			return this;
 		}
 
 		logger.info("Creating a collection {}", this.collectionName);
-		Mono.from(mongoData.getDb().createCollection(this.collectionName)).block();
+		template.createCollection(this.collectionName).map(c -> {
 
-		if (store.getUniqueKeys() != null && !store.getUniqueKeys().isEmpty()) {
+			createIndexes(template, store.getUniqueKeys(), true);
+			createIndexes(template, store.getKeys(), false);
+			return c;
+		}).block();
 
-			logger.info("Creating indexes");
-			store.getUniqueKeys().stream().map(e -> mongoData.getDb().getCollection(this.collectionName).createIndex(
-					e.isDescending() ? Indexes.descending(e.getFields()) : Indexes.asscending(e.getFields())))
-			.forEach(e -> e.subscribe());
+		return this;
+	}
+
+	private void createIndexes(ReactiveMongoTemplate temp, List<Key> keys, boolean isUnique) {
+		
+		if (keys != null && !keys.isEmpty()) {
+			logger.info("Creating unique indexes");
+			for (Key key : keys) {
+
+				Index index = new Index();
+				for (String field : key.getFields()) {
+					index = index.on(field, key.isDescending() ? Sort.Direction.DESC : Sort.Direction.ASC);
+				}
+
+				temp.indexOps(this.collectionName).ensureIndex(isUnique ? index.unique() : index);
+			}
 		}
 	}
 
@@ -152,12 +173,6 @@ public class MongoStore implements IStore {
 	}
 
 	@Override
-	public Flux<JsonObject> filter(Condition condition, Sort sort) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public Mono<JsonObject> update(JsonObject obj) {
 		// TODO Auto-generated method stub
 		return null;
@@ -186,11 +201,4 @@ public class MongoStore implements IStore {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
-	@Override
-	public Flux<JsonObject> filter(Condition condition) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 }

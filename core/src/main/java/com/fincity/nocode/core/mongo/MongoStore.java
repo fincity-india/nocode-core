@@ -1,6 +1,11 @@
 package com.fincity.nocode.core.mongo;
 
-import static com.fincity.nocode.kirun.engine.json.schema.type.SchemaType.*;
+import static com.fincity.nocode.kirun.engine.json.schema.type.SchemaType.BOOLEAN;
+import static com.fincity.nocode.kirun.engine.json.schema.type.SchemaType.DOUBLE;
+import static com.fincity.nocode.kirun.engine.json.schema.type.SchemaType.FLOAT;
+import static com.fincity.nocode.kirun.engine.json.schema.type.SchemaType.INTEGER;
+import static com.fincity.nocode.kirun.engine.json.schema.type.SchemaType.LONG;
+import static com.fincity.nocode.kirun.engine.json.schema.type.SchemaType.STRING;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,12 +28,13 @@ import com.fincity.nocode.kirun.engine.json.schema.Schema;
 import com.fincity.nocode.kirun.engine.json.schema.type.SchemaType;
 import com.fincity.nocode.kirun.engine.json.schema.type.SingleType;
 import com.google.gson.JsonObject;
+import com.mongodb.client.model.Indexes;
 
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 public class MongoStore implements IStore {
-	
+
 	private static final Logger logger = LoggerFactory.getLogger(MongoStore.class);
 
 	private MongoBase mongoData;
@@ -49,13 +55,25 @@ public class MongoStore implements IStore {
 		this.schema = schema;
 		this.store = store;
 		this.collectionName = cName;
-		
+
 		long count = Flux.from(mongoData.getDb().listCollectionNames()).filter(c -> c.equals(cName)).count().block();
-		
-		if (count != 0l)
+
+		if (count != 0l) {
+
+			logger.debug("Collection {} exists for tenant {}", this.collectionName, this.getMongoData().getTenant());
 			return;
-		
-		mongoData.getDb().createCollection();
+		}
+
+		logger.info("Creating a collection {}", this.collectionName);
+		Mono.from(mongoData.getDb().createCollection(this.collectionName)).block();
+
+		if (store.getUniqueKeys() != null && !store.getUniqueKeys().isEmpty()) {
+
+			logger.info("Creating indexes");
+			store.getUniqueKeys().stream().map(e -> mongoData.getDb().getCollection(this.collectionName).createIndex(
+					e.isDescending() ? Indexes.descending(e.getFields()) : Indexes.asscending(e.getFields())))
+			.forEach(e -> e.subscribe());
+		}
 	}
 
 	public MongoBase getMongoData() {

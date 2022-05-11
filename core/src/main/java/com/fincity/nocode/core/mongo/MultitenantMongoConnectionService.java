@@ -6,6 +6,7 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.DisposableBean;
+import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
 import org.springframework.stereotype.Service;
 
 import com.fincity.nocode.core.NocodeException;
@@ -13,7 +14,6 @@ import com.fincity.nocode.core.system.schema.connection.MongoDBCProperties;
 import com.mongodb.ConnectionString;
 import com.mongodb.reactivestreams.client.MongoClient;
 import com.mongodb.reactivestreams.client.MongoClients;
-import com.mongodb.reactivestreams.client.MongoDatabase;
 
 @Service
 public class MultitenantMongoConnectionService implements DisposableBean {
@@ -22,9 +22,9 @@ public class MultitenantMongoConnectionService implements DisposableBean {
 
 	private Map<String, MongoClient> tenants = new HashMap<>();
 
-	private Map<String, MongoDatabase> databases = new HashMap<>();
+	private Map<String, ReactiveMongoTemplate> templates = new HashMap<>();
 
-	public MongoDatabase createConnection(String tenant, MongoDBCProperties properties) {
+	public ReactiveMongoTemplate createConnection(String tenant, MongoDBCProperties properties) {
 
 		logger.debug("Creating connection for {}", tenant);
 
@@ -33,12 +33,12 @@ public class MultitenantMongoConnectionService implements DisposableBean {
 
 			logger.debug("Created connection for {}", tenant);
 
-			MongoDatabase db = client.getDatabase(cs.getDatabase());
+			ReactiveMongoTemplate template = new ReactiveMongoTemplate(client, cs.getDatabase());
 
 			tenants.put(tenant, client);
-			databases.put(tenant, db);
+			templates.put(tenant, template);
 
-			return db;
+			return template;
 		} catch (Exception ex) {
 
 			var nce = new NocodeException(3, "Unable to create a connection to DB", ex);
@@ -54,9 +54,9 @@ public class MultitenantMongoConnectionService implements DisposableBean {
 		return tenants.get(tenant);
 	}
 
-	public MongoDatabase getDatabase(String tenant) {
+	public ReactiveMongoTemplate getMongoTemplate(String tenant) {
 
-		return databases.get(tenant);
+		return templates.get(tenant);
 	}
 
 	@Override

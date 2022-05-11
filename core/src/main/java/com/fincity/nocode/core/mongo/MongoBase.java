@@ -6,6 +6,8 @@ import static com.fincity.nocode.kirun.engine.constant.KIRunConstants.NAMESPACE;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
+
 import com.fincity.nocode.core.db.IBase;
 import com.fincity.nocode.core.db.IStore;
 import com.fincity.nocode.core.system.CoreConstants;
@@ -16,19 +18,18 @@ import com.fincity.nocode.core.system.schema.connection.Connection;
 import com.fincity.nocode.kirun.engine.json.schema.Schema;
 import com.google.gson.Gson;
 import com.google.gson.JsonPrimitive;
-import com.mongodb.reactivestreams.client.MongoDatabase;
 
 import reactor.core.publisher.Mono;
 
 public class MongoBase implements IBase {
 
-	private MongoDatabase db;
+	private ReactiveMongoTemplate template;
 	private String tenant;
 	private Map<String, IStore> tables = new ConcurrentHashMap<>();
 
-	public MongoBase(String tenant, MongoDatabase db) {
+	public MongoBase(String tenant, ReactiveMongoTemplate template) {
 
-		this.db = db;
+		this.template = template;
 		this.tenant = tenant;
 
 		String cName = this.getCollectionName(Schema.SCHEMA);
@@ -53,8 +54,8 @@ public class MongoBase implements IBase {
 		return this.tenant;
 	}
 
-	public MongoDatabase getDb() {
-		return db;
+	public ReactiveMongoTemplate getTemplate() {
+		return template;
 	}
 
 	@Override
@@ -118,6 +119,6 @@ public class MongoBase implements IBase {
 	@Override
 	public Mono<IBase> copy(String tenant) {
 	
-		return Mono.just(new MongoBase(tenant, this.db));
+		return Mono.just(new MongoBase(tenant, this.template));
 	}
 }

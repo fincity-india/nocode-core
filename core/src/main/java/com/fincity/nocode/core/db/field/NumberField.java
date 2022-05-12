@@ -53,4 +53,23 @@ public class NumberField extends AbstractTableField {
 		return new NumberCondition(conditionType, this, value);
 	}
 
+	public static Number toNumber(SchemaType type, JsonPrimitive value) {
+		
+		if (value == null || value.isJsonNull()) return null;
+		
+		switch (type) { // NOSONAR - you are wrong, I get more readability with switch compared to if.
+
+			case DOUBLE:
+				return value.getAsDouble();
+			case INTEGER:
+				return value.getAsInt();
+			case FLOAT:
+				return value.getAsFloat();
+			case LONG:
+				return value.getAsLong();
+			default:
+				return null;
+		}
+	}
+
 }

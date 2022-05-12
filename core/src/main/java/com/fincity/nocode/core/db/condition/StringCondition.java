@@ -16,13 +16,14 @@ public class StringCondition implements Condition {
 	private final IField field;
 	private final JsonPrimitive value; // NOSONAR - Gson decided not to serialise the json library.
 	private final IField compareTo;
+	private boolean ignoreCase = true;
 
-	public StringCondition(ConditionType type, IField field, JsonPrimitive value) {
-		this(type, field, value, null);
+	public StringCondition(ConditionType type, IField field, JsonPrimitive value, boolean ignoreCase) {
+		this(type, field, value, null, ignoreCase);
 	}
 
-	public StringCondition(ConditionType type, IField field, IField compareTo) {
-		this(type, field, null, compareTo);
+	public StringCondition(ConditionType type, IField field, IField compareTo, boolean ignoreCase) {
+		this(type, field, null, compareTo, ignoreCase);
 	}
 
 	@Override

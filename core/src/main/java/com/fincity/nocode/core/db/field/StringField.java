@@ -52,12 +52,12 @@ public class StringField extends AbstractTableField {
 	@Override
 	protected Condition getCondition(ConditionType conditionType, JsonPrimitive value) {
 
-		return new StringCondition(conditionType, this, value);
+		return new StringCondition(conditionType, this, value, true);
 	}
 
 	@Override
 	protected Condition getCondition(ConditionType conditionType, IField value) {
 
-		return new StringCondition(conditionType, this, value);
+		return new StringCondition(conditionType, this, value, true);
 	}
 }

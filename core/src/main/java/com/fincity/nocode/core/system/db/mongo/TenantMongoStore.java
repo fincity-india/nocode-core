@@ -19,9 +19,11 @@ public class TenantMongoStore extends MongoStore {
 	
 	public Flux<Tenant> filter(Condition condition) {
 		
+		return this.filter(condition, (Sort) null);
 	}
 	
 	public Flux<Tenant> filter(Condition condition, Sort sort) {
-		
+	
+		return this.getMongoData().getTemplate().find(this.toQuery(condition, sort), Tenant.class);
 	}
 }

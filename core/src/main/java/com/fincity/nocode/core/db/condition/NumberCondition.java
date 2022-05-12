@@ -2,6 +2,7 @@ package com.fincity.nocode.core.db.condition;
 
 import com.fincity.nocode.core.db.condition.exception.ConditionException;
 import com.fincity.nocode.core.db.field.IField;
+import com.fincity.nocode.core.db.field.NumberField;
 import com.google.gson.JsonPrimitive;
 
 import lombok.AllArgsConstructor;
@@ -15,7 +16,7 @@ public class NumberCondition implements Condition {
 
 	private final ConditionType type;
 	private final IField field;
-	private final JsonPrimitive value; // NOSONAR - Gson decided not to serialise the json library.
+	private final JsonPrimitive value; // NOSONAR - Gson decided not to serialise the JSON library.
 	private final IField compareTo;
 
 	public NumberCondition(ConditionType type, IField field, JsonPrimitive value) {
@@ -50,6 +51,11 @@ public class NumberCondition implements Condition {
 	@Override
 	public ConditionType getType() {
 		return this.type;
+	}
+
+	public Number getNumberValue() {
+		
+		return NumberField.toNumber(this.field.getSchemaType(), value);
 	}
 
 }

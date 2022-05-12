@@ -7,7 +7,12 @@ import static com.fincity.nocode.kirun.engine.json.schema.type.SchemaType.INTEGE
 import static com.fincity.nocode.kirun.engine.json.schema.type.SchemaType.LONG;
 import static com.fincity.nocode.kirun.engine.json.schema.type.SchemaType.STRING;
 
+import java.util.EnumMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,11 +21,19 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
 import org.springframework.data.mongodb.core.index.Index;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.util.MultiValueMap;
 
 import com.fincity.nocode.core.db.IStore;
 import com.fincity.nocode.core.db.Key;
+import com.fincity.nocode.core.db.condition.BooleanCondition;
+import com.fincity.nocode.core.db.condition.CompoundCondition;
 import com.fincity.nocode.core.db.condition.Condition;
+import com.fincity.nocode.core.db.condition.ConditionType;
+import com.fincity.nocode.core.db.condition.InCondition;
+import com.fincity.nocode.core.db.condition.NumberCondition;
+import com.fincity.nocode.core.db.condition.StringCondition;
 import com.fincity.nocode.core.db.field.BooleanField;
 import com.fincity.nocode.core.db.field.IField;
 import com.fincity.nocode.core.db.field.NumberField;
@@ -82,7 +95,7 @@ public class MongoStore implements IStore {
 	}
 
 	private void createIndexes(ReactiveMongoTemplate temp, List<Key> keys, boolean isUnique) {
-		
+
 		if (keys != null && !keys.isEmpty()) {
 			logger.info("Creating unique indexes");
 			for (Key key : keys) {
@@ -140,6 +153,89 @@ public class MongoStore implements IStore {
 		}
 
 		return new StringField(STRING, fieldName);
+	}
+
+	protected Query toQuery(Condition condition, Sort sort) {
+
+		Query query = new Query();
+
+		if (condition != null)
+			query.addCriteria(this.toCriteria(condition));
+
+		if (sort != null) {
+			return query.with(sort);
+		}
+
+		return query;
+	}
+
+	@FunctionalInterface
+	private interface ConditionFuntion {
+		public Criteria apply(Criteria c, Object o, Condition cond);
+	}
+
+	private static final Map<ConditionType, ConditionFuntion> CONDITION_MAPPING = new EnumMap<>(ConditionType.class);
+
+	static {
+		CONDITION_MAPPING.put(ConditionType.GREATER_THAN, (c, o, cond) -> c.gt(o));
+		CONDITION_MAPPING.put(ConditionType.GREATER_THAN_EQUAL, (c, o, cond) -> c.gte(o));
+		CONDITION_MAPPING.put(ConditionType.LESS_THAN, (c, o, cond) -> c.lt(o));
+		CONDITION_MAPPING.put(ConditionType.LESS_THAN_EQUAL, (c, o, cond) -> c.lte(o));
+		CONDITION_MAPPING.put(ConditionType.NOT_EQUAL, (c, o, cond) -> c.ne(o));
+		CONDITION_MAPPING.put(ConditionType.UNARY_NOT, (c, o, cond) -> c.not());
+
+		// See if you have to check the existence of the field when it is a boolean
+		// field.
+		CONDITION_MAPPING.put(ConditionType.EQUAL, (c, o, cond) -> {
+			if (cond instanceof StringCondition sc && sc.isIgnoreCase())
+				return c.regex(Pattern.quote(o.toString()), "i");
+			return c.is(o);
+		});
+
+		CONDITION_MAPPING.put(ConditionType.STARTS_WITH,
+				(c, o, cond) -> c.regex("^" + Pattern.quote(o.toString()) + ".*$",
+						(cond instanceof StringCondition sc && sc.isIgnoreCase()) ? "i" : null));
+
+		CONDITION_MAPPING.put(ConditionType.CONTAINS,
+				(c, o, cond) -> c.regex(".*" + Pattern.quote(o.toString()) + ".*$",
+						(cond instanceof StringCondition sc && sc.isIgnoreCase()) ? "i" : null));
+
+		CONDITION_MAPPING.put(ConditionType.ENDS_WITH, (c, o, cond) -> c.regex(".*" + Pattern.quote(o.toString()) + "$",
+				(cond instanceof StringCondition sc && sc.isIgnoreCase()) ? "i" : null));
+	}
+
+	// Currently only supporting the queries with comparison to some value but not
+	// to other fields.
+	private Criteria toCriteria(Condition condition) {
+
+		if (condition instanceof NumberCondition n) {
+
+			return CONDITION_MAPPING.getOrDefault(n.getType(), CONDITION_MAPPING.get(ConditionType.EQUAL))
+					.apply(Criteria.where(n.getField().getName()), n.getNumberValue(), condition);
+		} else if (condition instanceof StringCondition sc) {
+
+			return CONDITION_MAPPING.getOrDefault(sc.getType(), CONDITION_MAPPING.get(ConditionType.EQUAL))
+					.apply(Criteria.where(sc.getField().getName()), sc.getValue().getAsString(), condition);
+		} else if (condition instanceof BooleanCondition bc) {
+
+			return CONDITION_MAPPING.getOrDefault(bc.getType(), CONDITION_MAPPING.get(ConditionType.EQUAL))
+					.apply(Criteria.where(bc.getField().getName()), bc.getBooleanValue(), condition);
+		} else if (condition instanceof InCondition ic) {
+
+			return Criteria.where(ic.getField().getName()).in(ic.getValues().stream().map(e -> {
+				if (ic.getField() instanceof NumberField)
+					return NumberField.toNumber(ic.getField().getSchemaType(), e);				
+				return e.getAsString();
+			}).toList());
+		} else if (condition instanceof CompoundCondition cc) {
+			
+			if (cc.type == ConditionType.AND)
+				new Criteria().andOperator(cc.stream().map(this::toCriteria).filter(Objects::nonNull).toList());
+			else
+				new Criteria().orOperator(cc.stream().map(this::toCriteria).filter(Objects::nonNull).toList());
+		}
+
+		return null;
 	}
 
 	@Override

@@ -60,7 +60,7 @@ public abstract class AbstractTableField implements IField {
 	}
 	
 	public Condition in(List<JsonPrimitive> values) {
-		return new InCondition(values);
+		return new InCondition(this, values);
 	}
 	
 	public Condition in(JsonPrimitive... values) {

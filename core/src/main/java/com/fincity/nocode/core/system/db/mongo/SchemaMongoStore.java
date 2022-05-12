@@ -7,7 +7,6 @@ import com.fincity.nocode.core.mongo.MongoBase;
 import com.fincity.nocode.core.mongo.MongoStore;
 import com.fincity.nocode.core.system.schema.Store;
 import com.fincity.nocode.kirun.engine.json.schema.Schema;
-import com.google.gson.JsonObject;
 
 import reactor.core.publisher.Flux;
 
@@ -19,9 +18,11 @@ public class SchemaMongoStore extends MongoStore {
 	
 	public Flux<Schema> filter(Condition condition) {
 		
+		return this.filter(condition, (Sort) null);
 	}
 	
 	public Flux<Schema> filter(Condition condition, Sort sort) {
 		
+		return this.getMongoData().getTemplate().find(this.toQuery(condition, sort), Schema.class);
 	}
 }

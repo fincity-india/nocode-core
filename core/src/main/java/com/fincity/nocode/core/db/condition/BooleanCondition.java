@@ -21,10 +21,10 @@ public class BooleanCondition implements Condition {
 
 	public BooleanCondition(ConditionType type, IField field, JsonPrimitive value) {
 		this(type, field, value, null);
-		
+
 		if (value == null || value.isBoolean() || value.isJsonNull())
 			return;
-		
+
 		throw new ConditionException("Value have to be a boolean");
 	}
 
@@ -38,6 +38,13 @@ public class BooleanCondition implements Condition {
 	@Override
 	public ConditionType getType() {
 		return this.type;
+	}
+
+	public Boolean getBooleanValue() {
+
+		if (value == null || value.isJsonNull())
+			return Boolean.FALSE;
+		return value.getAsBoolean();
 	}
 
 }

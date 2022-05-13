@@ -15,5 +15,7 @@ public enum ConditionType {
 	STARTS_WITH,
 	ENDS_WITH,
 	CONTAINS,
+	NULL,
+	NOT_NULL
 	;
 }

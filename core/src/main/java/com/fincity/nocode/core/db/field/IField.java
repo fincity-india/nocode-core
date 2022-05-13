@@ -40,4 +40,8 @@ public interface IField extends Serializable {
 	public Condition in(List<JsonPrimitive> values);
 	
 	public Condition in(JsonPrimitive ...values);
+	
+	public Condition isNull();
+	
+	public Condition isNotNull();
 }

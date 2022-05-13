@@ -16,6 +16,7 @@ import com.fincity.nocode.core.system.db.mongo.SchemaMongoStore;
 import com.fincity.nocode.core.system.db.mongo.StoreMongoStore;
 import com.fincity.nocode.core.system.db.mongo.TenantMongoStore;
 import com.fincity.nocode.core.system.model.CoreSchema;
+import com.fincity.nocode.core.system.model.Package;
 import com.fincity.nocode.core.system.model.Store;
 import com.fincity.nocode.core.system.model.Tenant;
 import com.fincity.nocode.core.system.model.connection.Connection;
@@ -46,6 +47,9 @@ public class MongoBase implements IBase {
 		cName = this.getCollectionName(Store.SCHEMA);
 		tables.put(cName, new StoreMongoStore(this, Store.SCHEMA, Store.STORE_RECORD, cName).checkInitialization());
 
+		cName = this.getCollectionName(Package.SCHEMA);
+		tables.put(cName, new StoreMongoStore(this, Package.SCHEMA, Package.STORE_RECORD, cName).checkInitialization());
+
 		if (tenant.equals(CoreConstants.TENANT_MASTER)) {
 
 			cName = this.getCollectionName(Tenant.SCHEMA);
@@ -65,7 +69,7 @@ public class MongoBase implements IBase {
 	}
 
 	@Override
-	public Mono<IStore> getStore(final String namespace, final String storeName) {
+	public Mono<IStore> getStoreByNamespace(final String namespace, final String storeName) {
 
 		final String cName = this.getCollectionName(namespace, storeName);
 

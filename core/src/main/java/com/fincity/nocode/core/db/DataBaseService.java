@@ -15,13 +15,16 @@ import org.springframework.stereotype.Service;
 
 import com.fincity.nocode.core.system.CoreConstants;
 import com.fincity.nocode.core.system.db.mongo.ConnectionMongoStore;
+import com.fincity.nocode.core.system.db.mongo.PackageMongoStore;
 import com.fincity.nocode.core.system.db.mongo.StoreMongoStore;
 import com.fincity.nocode.core.system.db.mongo.TenantMongoStore;
+import com.fincity.nocode.core.system.model.Package;
 import com.fincity.nocode.core.system.model.Store;
 import com.fincity.nocode.core.system.model.Tenant;
 import com.fincity.nocode.core.system.model.connection.Connection;
 import com.google.gson.JsonPrimitive;
 
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Service(DataBaseService.SERVICE_NAME)
@@ -87,7 +90,7 @@ public class DataBaseService {
 				});
 	}
 
-	public Mono<IStore> getStore(String tenant, String namespace, String storeName) {
+	public Mono<IStore> getStoreByNamespace(String tenant, String namespace, String storeName) {
 
 		Mono<IBase> mTenantBase = this.getBase(tenant);
 
@@ -101,6 +104,25 @@ public class DataBaseService {
 
 					return mTenantBase.flatMap(tenantBase -> this.getBaseFromConnectionId(tenant,
 							tenantBase.getStore(Connection.SCHEMA), sStore.getConnectionId(), tenantBase));
-				}).flatMap(base -> base.getStore(namespace, storeName));
+				}).flatMap(base -> base.getStoreByNamespace(namespace, storeName));
+	}
+
+	public Mono<IStore> getStoreByPackageName(String tenant, String pkg, String storeName) {
+
+		Mono<IBase> mTenantBase = this.getBase(tenant);
+
+		Mono<Flux<Package>> packages = mTenantBase.flatMap(b -> b.getStore(Package.SCHEMA))
+				.map(PackageMongoStore.class::cast)
+				.map(p -> p.filter(
+						p.getField("packageName").equalTo(new JsonPrimitive(pkg)).and(p.getField("packageObjectName")
+								.isNull().or(p.getField("packageObjectName").equalTo(new JsonPrimitive(storeName))))));
+
+		return packages.flatMap(p -> p.hasElements().flatMap(has -> {
+			if (has.booleanValue())
+				return p.reduce((a, b) -> a.getPackageObjectName() == null ? b : a);
+			else
+				return Mono.just(new Package(null, pkg, storeName, pkg, storeName));
+		})).flatMap(p -> this.getStoreByNamespace(tenant, p.getNamespace(),
+				p.getObjectName() == null ? storeName : p.getObjectName()));
 	}
 }

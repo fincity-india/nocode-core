@@ -183,6 +183,8 @@ public class MongoStore implements IStore {
 		CONDITION_MAPPING.put(ConditionType.LESS_THAN_EQUAL, (c, o, cond) -> c.lte(o));
 		CONDITION_MAPPING.put(ConditionType.NOT_EQUAL, (c, o, cond) -> c.ne(o));
 		CONDITION_MAPPING.put(ConditionType.UNARY_NOT, (c, o, cond) -> c.not());
+		CONDITION_MAPPING.put(ConditionType.NULL, (c, o, cond) -> c.isNull());
+		CONDITION_MAPPING.put(ConditionType.NOT_NULL, (c, o, cond) -> c.isNull().not());
 
 		// See if you have to check the existence of the field when it is a boolean
 		// field.

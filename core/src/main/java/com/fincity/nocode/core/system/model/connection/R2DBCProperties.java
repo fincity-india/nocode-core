@@ -1,4 +1,4 @@
-package com.fincity.nocode.core.system.schema.connection;
+package com.fincity.nocode.core.system.model.connection;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -8,7 +8,7 @@ import org.springframework.boot.autoconfigure.r2dbc.R2dbcProperties.Pool;
 import static com.fincity.nocode.kirun.engine.json.schema.type.SchemaType.*;
 
 import com.fincity.nocode.core.system.CoreConstants;
-import com.fincity.nocode.core.system.schema.connection.Connection.ConnectionType;
+import com.fincity.nocode.core.system.model.connection.Connection.ConnectionType;
 import com.fincity.nocode.kirun.engine.json.schema.Schema;
 import com.fincity.nocode.kirun.engine.json.schema.object.AdditionalPropertiesType;
 import com.fincity.nocode.kirun.engine.json.schema.type.SingleType;

@@ -1,6 +1,5 @@
-package com.fincity.nocode.core.system.schema;
+package com.fincity.nocode.core.system.model;
 
-import static com.fincity.nocode.kirun.engine.json.schema.type.SchemaType.LONG;
 import static com.fincity.nocode.kirun.engine.json.schema.type.SchemaType.OBJECT;
 import static com.fincity.nocode.kirun.engine.json.schema.type.SchemaType.STRING;
 
@@ -11,7 +10,7 @@ import java.util.Map;
 import com.fincity.nocode.core.db.ForeignKey;
 import com.fincity.nocode.core.db.Key;
 import com.fincity.nocode.core.system.CoreConstants;
-import com.fincity.nocode.core.system.schema.connection.Connection;
+import com.fincity.nocode.core.system.model.connection.Connection;
 import com.fincity.nocode.kirun.engine.json.schema.Schema;
 import com.fincity.nocode.kirun.engine.json.schema.type.SingleType;
 
@@ -33,11 +32,7 @@ public class Tenant implements Serializable {
 					"id", Schema.of("id", STRING),
 					"code", Schema.of("code", STRING).setMinLength(5).setMaxLength(5),
 					"name", Schema.of("name", STRING),
-					CONNECTION_ID, Schema.of(CONNECTION_ID, STRING),
-					"createdAt", Schema.of("createdAt", LONG),
-					"createdBy", Schema.of("createdBy", STRING),
-					"updatedAt", Schema.of("updatedAt", LONG),
-					"updatedBy", Schema.of("updatedBy", STRING)));
+					CONNECTION_ID, Schema.of(CONNECTION_ID, STRING)));
 	
 	public static final Store STORE_RECORD = new Store().setAudited(true).setVersioned(true).setSoftDelete(true)
 			.setNamespace(CoreConstants.NAMESPACE_CORE)
@@ -54,8 +49,4 @@ public class Tenant implements Serializable {
 	private String code;
 	private String name;
 	private String connectionId;
-	private Long createdAt;
-	private String createdBy;
-	private Long updatedAt;
-	private String updatedBy;
 }

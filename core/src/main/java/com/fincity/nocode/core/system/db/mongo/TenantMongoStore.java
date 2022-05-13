@@ -5,8 +5,8 @@ import org.springframework.data.domain.Sort;
 import com.fincity.nocode.core.db.condition.Condition;
 import com.fincity.nocode.core.mongo.MongoBase;
 import com.fincity.nocode.core.mongo.MongoStore;
-import com.fincity.nocode.core.system.schema.Store;
-import com.fincity.nocode.core.system.schema.Tenant;
+import com.fincity.nocode.core.system.model.Store;
+import com.fincity.nocode.core.system.model.Tenant;
 import com.fincity.nocode.kirun.engine.json.schema.Schema;
 
 import reactor.core.publisher.Flux;

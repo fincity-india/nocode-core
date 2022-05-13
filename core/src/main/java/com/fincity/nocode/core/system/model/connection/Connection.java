@@ -1,4 +1,4 @@
-package com.fincity.nocode.core.system.schema.connection;
+package com.fincity.nocode.core.system.model.connection;
 
 import static com.fincity.nocode.kirun.engine.json.schema.type.SchemaType.OBJECT;
 import static com.fincity.nocode.kirun.engine.json.schema.type.SchemaType.STRING;
@@ -9,7 +9,7 @@ import java.util.Map;
 import java.util.stream.Stream;
 
 import com.fincity.nocode.core.system.CoreConstants;
-import com.fincity.nocode.core.system.schema.Store;
+import com.fincity.nocode.core.system.model.Store;
 import com.fincity.nocode.kirun.engine.json.schema.Schema;
 import com.fincity.nocode.kirun.engine.json.schema.type.SingleType;
 import com.google.gson.Gson;

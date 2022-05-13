@@ -15,10 +15,10 @@ import com.fincity.nocode.core.system.db.mongo.ConnectionMongoStore;
 import com.fincity.nocode.core.system.db.mongo.SchemaMongoStore;
 import com.fincity.nocode.core.system.db.mongo.StoreMongoStore;
 import com.fincity.nocode.core.system.db.mongo.TenantMongoStore;
-import com.fincity.nocode.core.system.schema.CoreSchema;
-import com.fincity.nocode.core.system.schema.Store;
-import com.fincity.nocode.core.system.schema.Tenant;
-import com.fincity.nocode.core.system.schema.connection.Connection;
+import com.fincity.nocode.core.system.model.CoreSchema;
+import com.fincity.nocode.core.system.model.Store;
+import com.fincity.nocode.core.system.model.Tenant;
+import com.fincity.nocode.core.system.model.connection.Connection;
 import com.fincity.nocode.kirun.engine.json.schema.Schema;
 import com.google.gson.JsonPrimitive;
 

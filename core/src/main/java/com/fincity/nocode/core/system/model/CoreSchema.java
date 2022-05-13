@@ -1,4 +1,4 @@
-package com.fincity.nocode.core.system.schema;
+package com.fincity.nocode.core.system.model;
 
 import static com.fincity.nocode.kirun.engine.constant.KIRunConstants.NAME;
 import static com.fincity.nocode.kirun.engine.constant.KIRunConstants.NAMESPACE;

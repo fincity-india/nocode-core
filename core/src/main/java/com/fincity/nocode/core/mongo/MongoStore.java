@@ -12,7 +12,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,7 +40,7 @@ import com.fincity.nocode.core.db.field.StringField;
 import com.fincity.nocode.core.db.field.exception.FieldException;
 import com.fincity.nocode.core.db.request.FilterRequest;
 import com.fincity.nocode.core.exception.CoreException;
-import com.fincity.nocode.core.system.schema.Store;
+import com.fincity.nocode.core.system.model.Store;
 import com.fincity.nocode.kirun.engine.json.schema.Schema;
 import com.fincity.nocode.kirun.engine.json.schema.type.SchemaType;
 import com.fincity.nocode.kirun.engine.json.schema.type.SingleType;
@@ -159,12 +158,13 @@ public class MongoStore implements IStore {
 
 		Query query = new Query();
 
-		if (condition != null)
-			query.addCriteria(this.toCriteria(condition));
+		Criteria crt = this.toCriteria(condition);
 
-		if (sort != null) {
+		if (crt != null)
+			query.addCriteria(crt);
+
+		if (sort != null)
 			return query.with(sort);
-		}
 
 		return query;
 	}
@@ -224,11 +224,11 @@ public class MongoStore implements IStore {
 
 			return Criteria.where(ic.getField().getName()).in(ic.getValues().stream().map(e -> {
 				if (ic.getField() instanceof NumberField)
-					return NumberField.toNumber(ic.getField().getSchemaType(), e);				
+					return NumberField.toNumber(ic.getField().getSchemaType(), e);
 				return e.getAsString();
 			}).toList());
 		} else if (condition instanceof CompoundCondition cc) {
-			
+
 			if (cc.type == ConditionType.AND)
 				new Criteria().andOperator(cc.stream().map(this::toCriteria).filter(Objects::nonNull).toList());
 			else

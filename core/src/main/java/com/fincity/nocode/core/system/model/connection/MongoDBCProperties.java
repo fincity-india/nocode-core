@@ -1,9 +1,9 @@
-package com.fincity.nocode.core.system.schema.connection;
+package com.fincity.nocode.core.system.model.connection;
 
 import java.util.Map;
 
 import com.fincity.nocode.core.system.CoreConstants;
-import com.fincity.nocode.core.system.schema.connection.Connection.ConnectionType;
+import com.fincity.nocode.core.system.model.connection.Connection.ConnectionType;
 import com.fincity.nocode.kirun.engine.json.schema.Schema;
 import com.fincity.nocode.kirun.engine.json.schema.type.SchemaType;
 import com.fincity.nocode.kirun.engine.json.schema.type.SingleType;

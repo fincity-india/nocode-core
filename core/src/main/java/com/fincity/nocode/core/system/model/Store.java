@@ -1,9 +1,8 @@
-package com.fincity.nocode.core.system.schema;
+package com.fincity.nocode.core.system.model;
 
 import static com.fincity.nocode.kirun.engine.constant.KIRunConstants.NAME;
 import static com.fincity.nocode.kirun.engine.constant.KIRunConstants.NAMESPACE;
 import static com.fincity.nocode.kirun.engine.json.schema.type.SchemaType.BOOLEAN;
-import static com.fincity.nocode.kirun.engine.json.schema.type.SchemaType.LONG;
 import static com.fincity.nocode.kirun.engine.json.schema.type.SchemaType.OBJECT;
 import static com.fincity.nocode.kirun.engine.json.schema.type.SchemaType.STRING;
 import static java.util.Map.entry;
@@ -15,7 +14,7 @@ import java.util.Map;
 import com.fincity.nocode.core.db.ForeignKey;
 import com.fincity.nocode.core.db.Key;
 import com.fincity.nocode.core.system.CoreConstants;
-import com.fincity.nocode.core.system.schema.connection.Connection;
+import com.fincity.nocode.core.system.model.connection.Connection;
 import com.fincity.nocode.kirun.engine.json.schema.Schema;
 import com.fincity.nocode.kirun.engine.json.schema.type.SingleType;
 
@@ -43,10 +42,7 @@ public class Store implements Serializable {
 					entry(CONNECTION_ID, Schema.of(CONNECTION_ID, STRING)),
 					entry("versioned", Schema.of("versioned", BOOLEAN)),
 					entry("softDelete", Schema.of("softDelete", BOOLEAN)),
-					entry("audited", Schema.of("audited", BOOLEAN)), entry("createdAt", Schema.of("createdAt", LONG)),
-					entry("createdBy", Schema.of("createdBy", STRING)),
-					entry("updatedAt", Schema.of("updatedAt", LONG)),
-					entry("updatedBy", Schema.of("updatedBy", STRING)),
+					entry("audited", Schema.of("audited", BOOLEAN)),
 					entry("uniqueKeys", Schema.ofArray("uniqueKeys", Key.SCHEMA)),
 					entry("keys", Schema.ofArray("keys", Key.SCHEMA)),
 					entry("foreignKeys", Schema.ofArray("foreignKeys", ForeignKey.SCHEMA))));
@@ -71,10 +67,6 @@ public class Store implements Serializable {
 	private boolean versioned = false;
 	private boolean audited = false;
 	private boolean softDelete = false;
-	private Long createdAt;
-	private String createdBy;
-	private Long updatedAt;
-	private String updatedBy;
 	private List<Key> uniqueKeys;
 	private List<Key> keys;
 	private List<ForeignKey> foreignKeys;

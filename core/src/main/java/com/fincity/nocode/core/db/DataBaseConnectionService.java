@@ -6,9 +6,9 @@ import org.springframework.stereotype.Service;
 import com.fincity.nocode.core.NocodeException;
 import com.fincity.nocode.core.mongo.MongoBase;
 import com.fincity.nocode.core.mongo.MultitenantMongoConnectionService;
-import com.fincity.nocode.core.system.schema.connection.IConnectionProperties;
-import com.fincity.nocode.core.system.schema.connection.MongoDBCProperties;
-import com.fincity.nocode.core.system.schema.connection.R2DBCProperties;
+import com.fincity.nocode.core.system.model.connection.IConnectionProperties;
+import com.fincity.nocode.core.system.model.connection.MongoDBCProperties;
+import com.fincity.nocode.core.system.model.connection.R2DBCProperties;
 
 @Service(DataBaseConnectionService.SERVICE_NAME)
 public class DataBaseConnectionService {

@@ -17,9 +17,9 @@ import com.fincity.nocode.core.system.CoreConstants;
 import com.fincity.nocode.core.system.db.mongo.ConnectionMongoStore;
 import com.fincity.nocode.core.system.db.mongo.StoreMongoStore;
 import com.fincity.nocode.core.system.db.mongo.TenantMongoStore;
-import com.fincity.nocode.core.system.schema.Store;
-import com.fincity.nocode.core.system.schema.Tenant;
-import com.fincity.nocode.core.system.schema.connection.Connection;
+import com.fincity.nocode.core.system.model.Store;
+import com.fincity.nocode.core.system.model.Tenant;
+import com.fincity.nocode.core.system.model.connection.Connection;
 import com.google.gson.JsonPrimitive;
 
 import reactor.core.publisher.Mono;

@@ -15,7 +15,7 @@ import com.fincity.nocode.core.system.db.mongo.ConnectionMongoStore;
 import com.fincity.nocode.core.system.db.mongo.SchemaMongoStore;
 import com.fincity.nocode.core.system.db.mongo.StoreMongoStore;
 import com.fincity.nocode.core.system.db.mongo.TenantMongoStore;
-import com.fincity.nocode.core.system.model.CoreSchema;
+import com.fincity.nocode.core.system.model.CoreStoreRecords;
 import com.fincity.nocode.core.system.model.Package;
 import com.fincity.nocode.core.system.model.Store;
 import com.fincity.nocode.core.system.model.Tenant;
@@ -38,7 +38,7 @@ public class MongoBase implements IBase {
 
 		String cName = this.getCollectionName(Schema.SCHEMA);
 		tables.put(cName,
-				new SchemaMongoStore(this, Schema.SCHEMA, CoreSchema.STORE_RECORD, cName).checkInitialization());
+				new SchemaMongoStore(this, Schema.SCHEMA, CoreStoreRecords.STORE_RECORD_SCHEMA, cName).checkInitialization());
 
 		cName = this.getCollectionName(Connection.SCHEMA);
 		tables.put(cName, new ConnectionMongoStore(this, Connection.SCHEMA, Connection.STORE_RECORD, cName)

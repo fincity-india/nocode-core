@@ -35,6 +35,10 @@ public class MongoBase implements IBase {
 
 		this.template = template;
 		this.tenant = tenant;
+	}
+	
+	@Override
+	public void initializeBaseForTenant() {
 
 		String cName = this.getCollectionName(Schema.SCHEMA);
 		tables.put(cName,
@@ -47,15 +51,15 @@ public class MongoBase implements IBase {
 		cName = this.getCollectionName(Store.SCHEMA);
 		tables.put(cName, new StoreMongoStore(this, Store.SCHEMA, Store.STORE_RECORD, cName).checkInitialization());
 
-		cName = this.getCollectionName(Package.SCHEMA);
-		tables.put(cName, new StoreMongoStore(this, Package.SCHEMA, Package.STORE_RECORD, cName).checkInitialization());
-
 		if (tenant.equals(CoreConstants.TENANT_MASTER)) {
 
 			cName = this.getCollectionName(Tenant.SCHEMA);
 			tables.put(cName,
 					new TenantMongoStore(this, Tenant.SCHEMA, Tenant.STORE_RECORD, cName).checkInitialization());
 		}
+		
+		cName = this.getCollectionName(Package.SCHEMA);
+		tables.put(cName, new StoreMongoStore(this, Package.SCHEMA, Package.STORE_RECORD, cName).checkInitialization());
 	}
 
 	@Override

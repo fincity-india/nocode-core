@@ -10,4 +10,5 @@ public interface IBase {
 	public String getTenant();
 	public Mono<IStore> getStore(Schema s);
 	public Mono<IStore> getStoreByNamespace(String namespace, String store);
+	public void initializeBaseForTenant();
 }

@@ -65,6 +65,7 @@ public class DataBaseService {
 				.map(Tenant::getConnectionId)
 				.flatMap(cid -> getBaseFromConnectionId(tenant, mConnectionStore, cid, masterBase)).map(base -> {
 					this.bases.put(tenant, base);
+					base.initializeBaseForTenant();
 					return base;
 				});
 

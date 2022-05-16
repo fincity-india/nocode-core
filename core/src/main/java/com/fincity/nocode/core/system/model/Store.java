@@ -32,29 +32,37 @@ public class Store implements Serializable {
 	private static final String SCHEMA_NAME = "Store";
 
 	public static final Schema SCHEMA = new Schema().setType(new SingleType(OBJECT))
-			.setNamespace(CoreConstants.NAMESPACE_CORE).setName(SCHEMA_NAME).setTitle(SCHEMA_NAME).setVersion(1)
-			.setProperties(Map.ofEntries(entry(NAMESPACE, Schema.of(NAMESPACE, STRING)),
-					entry("id", Schema.of("id", STRING)), entry("readPermission", Schema.of("readPermission", STRING)),
-					entry(NAME, Schema.of(NAME, STRING)),
-					entry("writePermission", Schema.of("writePermission", STRING)),
-					entry("updatePermission", Schema.of("updatePermission", STRING)),
-					entry("deletePermission", Schema.of("deletePermission", STRING)),
-					entry(CONNECTION_ID, Schema.of(CONNECTION_ID, STRING)),
-					entry("versioned", Schema.of("versioned", BOOLEAN)),
-					entry("softDelete", Schema.of("softDelete", BOOLEAN)),
-					entry("audited", Schema.of("audited", BOOLEAN)),
-					entry("uniqueKeys", Schema.ofArray("uniqueKeys", Key.SCHEMA)),
-					entry("keys", Schema.ofArray("keys", Key.SCHEMA)),
-					entry("foreignKeys", Schema.ofArray("foreignKeys", ForeignKey.SCHEMA))));
+	        .setNamespace(CoreConstants.NAMESPACE_CORE)
+	        .setName(SCHEMA_NAME)
+	        .setTitle(SCHEMA_NAME)
+	        .setVersion(1)
+	        .setProperties(Map.ofEntries(entry(NAMESPACE, Schema.of(NAMESPACE, STRING)),
+	                entry("id", Schema.of("id", STRING)), entry("readPermission", Schema.of("readPermission", STRING)),
+	                entry(NAME, Schema.of(NAME, STRING)),
+	                entry("writePermission", Schema.of("writePermission", STRING)),
+	                entry("updatePermission", Schema.of("updatePermission", STRING)),
+	                entry("deletePermission", Schema.of("deletePermission", STRING)),
+	                entry(CONNECTION_ID, Schema.of(CONNECTION_ID, STRING)),
+	                entry("versioned", Schema.of("versioned", BOOLEAN)),
+	                entry("softDelete", Schema.of("softDelete", BOOLEAN)),
+	                entry("audited", Schema.of("audited", BOOLEAN)),
+	                entry("uniqueKeys", Schema.ofArray("uniqueKeys", Key.SCHEMA)),
+	                entry("keys", Schema.ofArray("keys", Key.SCHEMA)),
+	                entry("foreignKeys", Schema.ofArray("foreignKeys", ForeignKey.SCHEMA))));
 
-	public static final Store STORE_RECORD = new Store().setAudited(true).setVersioned(true).setSoftDelete(true)
-			.setNamespace(CoreConstants.NAMESPACE_CORE).setName(SCHEMA_NAME)
-			.setWritePermission(CoreConstants.PERMISSION_DEVELOPER)
-			.setUpdatePermission(CoreConstants.PERMISSION_DEVELOPER)
-			.setDeletePermission(CoreConstants.PERMISSION_DEVELOPER)
-			.setUniqueKeys(List.of(new Key().setFields(List.of(NAMESPACE, NAME))))
-			.setForeignKeys(List.of(new ForeignKey().setField(CONNECTION_ID).setNamespace(Connection.SCHEMA.getNamespace())
-							.setName(Connection.SCHEMA.getName()).setForeignField("id")));
+	public static final Store STORE_RECORD = new Store().setAudited(true)
+	        .setVersioned(true)
+	        .setSoftDelete(true)
+	        .setNamespace(CoreConstants.NAMESPACE_CORE)
+	        .setName(SCHEMA_NAME)
+	        .setWritePermission(CoreConstants.PERMISSION_DEVELOPER)
+	        .setUpdatePermission(CoreConstants.PERMISSION_DEVELOPER)
+	        .setDeletePermission(CoreConstants.PERMISSION_DEVELOPER)
+	        .setUniqueKeys(List.of(new Key().setFields(List.of(NAMESPACE, NAME))))
+	        .setForeignKeys(List.of(new ForeignKey().setField(CONNECTION_ID)
+	                .setNamespace(Connection.SCHEMA.getNamespace())
+	                .setName(Connection.SCHEMA.getName())
+	                .setForeignField("id")));
 
 	private String id;
 	private String namespace;

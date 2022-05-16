@@ -21,10 +21,10 @@ public class NumberCondition implements Condition {
 
 	public NumberCondition(ConditionType type, IField field, JsonPrimitive value) {
 		this(type, field, value, null);
-		
+
 		if (value == null || value.isNumber() || value.isJsonNull())
 			return;
-		
+
 		throw new ConditionException("Value have to be a number");
 	}
 
@@ -39,7 +39,8 @@ public class NumberCondition implements Condition {
 			throw new ConditionException("Cannot compare if the field is not numeric");
 		}
 
-		switch (compareTo.getSchemaType()) { // NOSONAR - you are wrong, I get more readability with switch compared to if.
+		switch (compareTo.getSchemaType()) { // NOSONAR - you are wrong, I get more readability with switch compared to
+		                                     // if.
 
 		case DOUBLE, INTEGER, FLOAT, LONG:
 			break;
@@ -54,7 +55,7 @@ public class NumberCondition implements Condition {
 	}
 
 	public Number getNumberValue() {
-		
+
 		return NumberField.toNumber(this.field.getSchemaType(), value);
 	}
 

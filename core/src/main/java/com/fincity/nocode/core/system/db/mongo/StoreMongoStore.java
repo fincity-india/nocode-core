@@ -17,18 +17,20 @@ public class StoreMongoStore extends MongoStore {
 	public StoreMongoStore(MongoBase mongoData, Schema schema, Store store, String cName) {
 		super(mongoData, schema, store, cName);
 	}
-	
+
 	public void initialize(List<Store> baseStores) {
-		
+
 	}
-	
+
 	public Flux<Store> filter(Condition condition) {
-		
+
 		return this.filter(condition, (Sort) null);
 	}
-	
+
 	public Flux<Store> filter(Condition condition, Sort sort) {
-		
-		return this.getMongoData().getTemplate().find(this.toQuery(condition, sort), Store.class);
+
+		return this.getMongoData()
+		        .getTemplate()
+		        .find(this.toQuery(condition, sort), Store.class);
 	}
 }

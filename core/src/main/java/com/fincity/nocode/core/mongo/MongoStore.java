@@ -59,8 +59,11 @@ public class MongoStore implements IStore {
 
 	public MongoStore(MongoBase mongoData, Schema schema, Store store, String cName) {
 
-		if (schema == null || schema.getType() == null || schema.getType().getAllowedSchemaTypes().size() != 1
-				|| !schema.getType().getAllowedSchemaTypes().contains(SchemaType.OBJECT))
+		if (schema == null || schema.getType() == null || schema.getType()
+		        .getAllowedSchemaTypes()
+		        .size() != 1 || !schema.getType()
+		                .getAllowedSchemaTypes()
+		                .contains(SchemaType.OBJECT))
 			throw new CoreException("Expected an object type schema and received : " + schema);
 
 		if (cName == null || cName.isBlank())
@@ -76,19 +79,24 @@ public class MongoStore implements IStore {
 
 		ReactiveMongoTemplate template = mongoData.getTemplate();
 
-		boolean exists = template.collectionExists(this.collectionName).block();
+		boolean exists = template.collectionExists(this.collectionName)
+		        .block();
 		if (exists) {
-			logger.debug("Collection {} exists for tenant {}", this.collectionName, this.getMongoData().getTenant());
+			logger.debug("Collection {} exists for tenant {}", this.collectionName, this.getMongoData()
+			        .getTenant());
 			return this;
 		}
 
 		logger.info("Creating a collection {}", this.collectionName);
-		template.createCollection(this.collectionName).map(c -> {
+		template.createCollection(this.collectionName)
+		        .map(c ->
+			        {
 
-			createIndexes(template, store.getUniqueKeys(), true);
-			createIndexes(template, store.getKeys(), false);
-			return c;
-		}).block();
+				        createIndexes(template, store.getUniqueKeys(), true);
+				        createIndexes(template, store.getKeys(), false);
+				        return c;
+			        })
+		        .block();
 
 		return this;
 	}
@@ -104,7 +112,8 @@ public class MongoStore implements IStore {
 					index = index.on(field, key.isDescending() ? Sort.Direction.DESC : Sort.Direction.ASC);
 				}
 
-				temp.indexOps(this.collectionName).ensureIndex(isUnique ? index.unique() : index);
+				temp.indexOps(this.collectionName)
+				        .ensureIndex(isUnique ? index.unique() : index);
 			}
 		}
 	}
@@ -136,14 +145,18 @@ public class MongoStore implements IStore {
 		Schema s = this.schema;
 
 		for (int i = 0; i < parts.length; i++) {
-			if (s.getProperties() == null || s.getProperties().isEmpty())
+			if (s.getProperties() == null || s.getProperties()
+			        .isEmpty())
 				throw new FieldException(fieldName + " is not found");
-			s = s.getProperties().get(parts[i]);
+			s = s.getProperties()
+			        .get(parts[i]);
 		}
 
 		if (s.getType() instanceof SingleType singleType) {
 
-			SchemaType type = singleType.getAllowedSchemaTypes().iterator().next();
+			SchemaType type = singleType.getAllowedSchemaTypes()
+			        .iterator()
+			        .next();
 			if (type == BOOLEAN) {
 				return new BooleanField(type, fieldName);
 			} else if (type == FLOAT || type == DOUBLE || type == INTEGER || type == LONG) {
@@ -184,26 +197,28 @@ public class MongoStore implements IStore {
 		CONDITION_MAPPING.put(ConditionType.NOT_EQUAL, (c, o, cond) -> c.ne(o));
 		CONDITION_MAPPING.put(ConditionType.UNARY_NOT, (c, o, cond) -> c.not());
 		CONDITION_MAPPING.put(ConditionType.NULL, (c, o, cond) -> c.isNull());
-		CONDITION_MAPPING.put(ConditionType.NOT_NULL, (c, o, cond) -> c.isNull().not());
+		CONDITION_MAPPING.put(ConditionType.NOT_NULL, (c, o, cond) -> c.isNull()
+		        .not());
 
 		// See if you have to check the existence of the field when it is a boolean
 		// field.
-		CONDITION_MAPPING.put(ConditionType.EQUAL, (c, o, cond) -> {
-			if (cond instanceof StringCondition sc && sc.isIgnoreCase())
-				return c.regex(Pattern.quote(o.toString()), "i");
-			return c.is(o);
-		});
+		CONDITION_MAPPING.put(ConditionType.EQUAL, (c, o, cond) ->
+			{
+				if (cond instanceof StringCondition sc && sc.isIgnoreCase())
+					return c.regex(Pattern.quote(o.toString()), "i");
+				return c.is(o);
+			});
 
 		CONDITION_MAPPING.put(ConditionType.STARTS_WITH,
-				(c, o, cond) -> c.regex("^" + Pattern.quote(o.toString()) + ".*$",
-						(cond instanceof StringCondition sc && sc.isIgnoreCase()) ? "i" : null));
+		        (c, o, cond) -> c.regex("^" + Pattern.quote(o.toString()) + ".*$",
+		                (cond instanceof StringCondition sc && sc.isIgnoreCase()) ? "i" : null));
 
 		CONDITION_MAPPING.put(ConditionType.CONTAINS,
-				(c, o, cond) -> c.regex(".*" + Pattern.quote(o.toString()) + ".*$",
-						(cond instanceof StringCondition sc && sc.isIgnoreCase()) ? "i" : null));
+		        (c, o, cond) -> c.regex(".*" + Pattern.quote(o.toString()) + ".*$",
+		                (cond instanceof StringCondition sc && sc.isIgnoreCase()) ? "i" : null));
 
 		CONDITION_MAPPING.put(ConditionType.ENDS_WITH, (c, o, cond) -> c.regex(".*" + Pattern.quote(o.toString()) + "$",
-				(cond instanceof StringCondition sc && sc.isIgnoreCase()) ? "i" : null));
+		        (cond instanceof StringCondition sc && sc.isIgnoreCase()) ? "i" : null));
 	}
 
 	// Currently only supporting the queries with comparison to some value but not
@@ -213,28 +228,46 @@ public class MongoStore implements IStore {
 		if (condition instanceof NumberCondition n) {
 
 			return CONDITION_MAPPING.getOrDefault(n.getType(), CONDITION_MAPPING.get(ConditionType.EQUAL))
-					.apply(Criteria.where(n.getField().getName()), n.getNumberValue(), condition);
+			        .apply(Criteria.where(n.getField()
+			                .getName()), n.getNumberValue(), condition);
 		} else if (condition instanceof StringCondition sc) {
 
 			return CONDITION_MAPPING.getOrDefault(sc.getType(), CONDITION_MAPPING.get(ConditionType.EQUAL))
-					.apply(Criteria.where(sc.getField().getName()), sc.getValue().getAsString(), condition);
+			        .apply(Criteria.where(sc.getField()
+			                .getName()), sc.getValue()
+			                        .getAsString(),
+			                condition);
 		} else if (condition instanceof BooleanCondition bc) {
 
 			return CONDITION_MAPPING.getOrDefault(bc.getType(), CONDITION_MAPPING.get(ConditionType.EQUAL))
-					.apply(Criteria.where(bc.getField().getName()), bc.getBooleanValue(), condition);
+			        .apply(Criteria.where(bc.getField()
+			                .getName()), bc.getBooleanValue(), condition);
 		} else if (condition instanceof InCondition ic) {
 
-			return Criteria.where(ic.getField().getName()).in(ic.getValues().stream().map(e -> {
-				if (ic.getField() instanceof NumberField)
-					return NumberField.toNumber(ic.getField().getSchemaType(), e);
-				return e.getAsString();
-			}).toList());
+			return Criteria.where(ic.getField()
+			        .getName())
+			        .in(ic.getValues()
+			                .stream()
+			                .map(e ->
+				                {
+					                if (ic.getField() instanceof NumberField)
+						                return NumberField.toNumber(ic.getField()
+						                        .getSchemaType(), e);
+					                return e.getAsString();
+				                })
+			                .toList());
 		} else if (condition instanceof CompoundCondition cc) {
 
 			if (cc.type == ConditionType.AND)
-				new Criteria().andOperator(cc.stream().map(this::toCriteria).filter(Objects::nonNull).toList());
+				new Criteria().andOperator(cc.stream()
+				        .map(this::toCriteria)
+				        .filter(Objects::nonNull)
+				        .toList());
 			else
-				new Criteria().orOperator(cc.stream().map(this::toCriteria).filter(Objects::nonNull).toList());
+				new Criteria().orOperator(cc.stream()
+				        .map(this::toCriteria)
+				        .filter(Objects::nonNull)
+				        .toList());
 		}
 
 		return null;

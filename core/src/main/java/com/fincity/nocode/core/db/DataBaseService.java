@@ -57,22 +57,25 @@ public class DataBaseService {
 		Mono<IStore> mConnectionStore = masterBase.getStore(Connection.SCHEMA);
 
 		return mTenantStore
-				// Get Tenant Object
-				.map(TenantMongoStore.class::cast)
-				.flatMap(tenantStore -> tenantStore
-						.filter(tenantStore.getField("code").equalTo(new JsonPrimitive(tenant))).next())
-				// Get Connection Id
-				.map(Tenant::getConnectionId)
-				.flatMap(cid -> getBaseFromConnectionId(tenant, mConnectionStore, cid, masterBase)).map(base -> {
-					this.bases.put(tenant, base);
-					base.initializeBaseForTenant();
-					return base;
-				});
+		        // Get Tenant Object
+		        .map(TenantMongoStore.class::cast)
+		        .flatMap(tenantStore -> tenantStore.filter(tenantStore.getField("code")
+		                .equalTo(new JsonPrimitive(tenant)))
+		                .next())
+		        // Get Connection Id
+		        .map(Tenant::getConnectionId)
+		        .flatMap(cid -> getBaseFromConnectionId(tenant, mConnectionStore, cid, masterBase))
+		        .map(base ->
+			        {
+				        this.bases.put(tenant, base);
+				        base.initializeBaseForTenant();
+				        return base;
+			        });
 
 	}
 
 	private Mono<IBase> getBaseFromConnectionId(String tenant, Mono<IStore> mConnectionStore, String cid,
-			IBase baseTenant) {
+	        IBase baseTenant) {
 
 		if (cid == null)
 			return baseTenant.copy(tenant);
@@ -82,30 +85,39 @@ public class DataBaseService {
 			return Mono.just(this.bases.get(tenant_cid));
 
 		return mConnectionStore.map(ConnectionMongoStore.class::cast)
-				.flatMap(connectionStore -> connectionStore
-						.filter(connectionStore.getField(ID).equalTo(new JsonPrimitive(cid))).next())
-				// Create Connection based on the properties
-				.map(connection -> connectionService.createBase(tenant, connection.getProps())).map(base -> {
-					this.bases.put(tenant_cid, base);
-					return base;
-				});
+		        .flatMap(connectionStore -> connectionStore.filter(connectionStore.getField(ID)
+		                .equalTo(new JsonPrimitive(cid)))
+		                .next())
+		        // Create Connection based on the properties
+		        .map(connection -> connectionService.createBase(tenant, connection.getProps()))
+		        .map(base ->
+			        {
+				        this.bases.put(tenant_cid, base);
+				        return base;
+			        });
 	}
 
 	public Mono<IStore> getStoreByNamespace(String tenant, String namespace, String storeName) {
 
 		Mono<IBase> mTenantBase = this.getBase(tenant);
 
-		return mTenantBase.flatMap(b -> b.getStore(Store.SCHEMA)).map(StoreMongoStore.class::cast)
-				.flatMap(s -> s.filter(s.getField(NAMESPACE).equalTo(new JsonPrimitive(namespace))
-						.and(s.getField(NAME).equalTo(new JsonPrimitive(storeName)))).next())
-				.flatMap(sStore -> {
+		return mTenantBase.flatMap(b -> b.getStore(Store.SCHEMA))
+		        .map(StoreMongoStore.class::cast)
+		        .flatMap(s -> s.filter(s.getField(NAMESPACE)
+		                .equalTo(new JsonPrimitive(namespace))
+		                .and(s.getField(NAME)
+		                        .equalTo(new JsonPrimitive(storeName))))
+		                .next())
+		        .flatMap(sStore ->
+			        {
 
-					if (sStore.getConnectionId() == null)
-						return mTenantBase;
+				        if (sStore.getConnectionId() == null)
+					        return mTenantBase;
 
-					return mTenantBase.flatMap(tenantBase -> this.getBaseFromConnectionId(tenant,
-							tenantBase.getStore(Connection.SCHEMA), sStore.getConnectionId(), tenantBase));
-				}).flatMap(base -> base.getStoreByNamespace(namespace, storeName));
+				        return mTenantBase.flatMap(tenantBase -> this.getBaseFromConnectionId(tenant,
+				                tenantBase.getStore(Connection.SCHEMA), sStore.getConnectionId(), tenantBase));
+			        })
+		        .flatMap(base -> base.getStoreByNamespace(namespace, storeName));
 	}
 
 	public Mono<IStore> getStoreByPackageName(String tenant, String pkg, String storeName) {
@@ -113,17 +125,23 @@ public class DataBaseService {
 		Mono<IBase> mTenantBase = this.getBase(tenant);
 
 		Mono<Flux<Package>> packages = mTenantBase.flatMap(b -> b.getStore(Package.SCHEMA))
-				.map(PackageMongoStore.class::cast)
-				.map(p -> p.filter(
-						p.getField("packageName").equalTo(new JsonPrimitive(pkg)).and(p.getField("packageObjectName")
-								.isNull().or(p.getField("packageObjectName").equalTo(new JsonPrimitive(storeName))))));
+		        .map(PackageMongoStore.class::cast)
+		        .map(p -> p.filter(p.getField("packageName")
+		                .equalTo(new JsonPrimitive(pkg))
+		                .and(p.getField("packageObjectName")
+		                        .isNull()
+		                        .or(p.getField("packageObjectName")
+		                                .equalTo(new JsonPrimitive(storeName))))));
 
-		return packages.flatMap(p -> p.hasElements().flatMap(has -> {
-			if (has.booleanValue())
-				return p.reduce((a, b) -> a.getPackageObjectName() == null ? b : a);
-			else
-				return Mono.just(new Package(null, pkg, storeName, pkg, storeName));
-		})).flatMap(p -> this.getStoreByNamespace(tenant, p.getNamespace(),
-				p.getObjectName() == null ? storeName : p.getObjectName()));
+		return packages.flatMap(p -> p.hasElements()
+		        .flatMap(has ->
+			        {
+				        if (has.booleanValue())
+					        return p.reduce((a, b) -> a.getPackageObjectName() == null ? b : a);
+				        else
+					        return Mono.just(new Package(null, pkg, storeName, pkg, storeName));
+			        }))
+		        .flatMap(p -> this.getStoreByNamespace(tenant, p.getNamespace(),
+		                p.getObjectName() == null ? storeName : p.getObjectName()));
 	}
 }

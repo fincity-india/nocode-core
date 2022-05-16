@@ -13,7 +13,7 @@ import com.google.gson.JsonObject;
 import reactor.core.publisher.Mono;
 
 public interface IStore {
-	
+
 	public Schema getSchema();
 
 	public Mono<JsonObject> create(JsonObject obj);
@@ -21,9 +21,9 @@ public interface IStore {
 	public Mono<JsonObject> getById(String id);
 
 	public Mono<Page<JsonObject>> filter(MultiValueMap<String, String> parameters);
-	
+
 	public Mono<Page<JsonObject>> filter(FilterRequest filter);
-	
+
 	public Mono<Page<JsonObject>> filter(Condition condition, Pageable pageable);
 
 	public Mono<JsonObject> update(JsonObject obj);
@@ -35,6 +35,6 @@ public interface IStore {
 	public Mono<Integer> deleteByFilter(Condition condition);
 
 	public Mono<Integer> deleteByFilter(FilterRequest filter);
-	
+
 	public IField getField(String fieldName);
 }

@@ -10,7 +10,7 @@ import com.google.gson.JsonPrimitive;
 public class BooleanField extends AbstractTableField {
 
 	private static final long serialVersionUID = 2455623617476260851L;
-	
+
 	private final String name;
 	private final SchemaType schemaType;
 

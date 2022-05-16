@@ -7,8 +7,12 @@ import reactor.core.publisher.Mono;
 public interface IBase {
 
 	public Mono<IBase> copy(String tenant);
+
 	public String getTenant();
+
 	public Mono<IStore> getStore(Schema s);
+
 	public Mono<IStore> getStoreByNamespace(String namespace, String store);
+
 	public void initializeBaseForTenant();
 }

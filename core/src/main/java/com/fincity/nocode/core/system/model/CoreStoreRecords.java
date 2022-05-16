@@ -12,19 +12,25 @@ import com.fincity.nocode.kirun.engine.model.FunctionDefinition;
 
 public class CoreStoreRecords {
 
-	public static final Store STORE_RECORD_SCHEMA = new Store().setAudited(true).setVersioned(true).setSoftDelete(true)
-			.setNamespace(Schema.SCHEMA.getNamespace()).setName(Schema.SCHEMA.getName())
-			.setWritePermission(CoreConstants.PERMISSION_DEVELOPER)
-			.setUpdatePermission(CoreConstants.PERMISSION_DEVELOPER)
-			.setDeletePermission(CoreConstants.PERMISSION_DEVELOPER)
-			.setUniqueKeys(List.of(new Key().setFields(List.of(NAMESPACE, NAME))));
-	
-	public static final Store STORE_RECORD_FUNCTION_DEFINITION = new Store().setAudited(true).setVersioned(true).setSoftDelete(true)
-			.setNamespace(FunctionDefinition.SCHEMA.getNamespace()).setName(FunctionDefinition.SCHEMA.getName())
-			.setWritePermission(CoreConstants.PERMISSION_DEVELOPER)
-			.setUpdatePermission(CoreConstants.PERMISSION_DEVELOPER)
-			.setDeletePermission(CoreConstants.PERMISSION_DEVELOPER)
-			.setUniqueKeys(List.of(new Key().setFields(List.of(NAMESPACE, NAME))));
+	public static final Store STORE_RECORD_SCHEMA = new Store().setAudited(true)
+	        .setVersioned(true)
+	        .setSoftDelete(true)
+	        .setNamespace(Schema.SCHEMA.getNamespace())
+	        .setName(Schema.SCHEMA.getName())
+	        .setWritePermission(CoreConstants.PERMISSION_DEVELOPER)
+	        .setUpdatePermission(CoreConstants.PERMISSION_DEVELOPER)
+	        .setDeletePermission(CoreConstants.PERMISSION_DEVELOPER)
+	        .setUniqueKeys(List.of(new Key().setFields(List.of(NAMESPACE, NAME))));
+
+	public static final Store STORE_RECORD_FUNCTION_DEFINITION = new Store().setAudited(true)
+	        .setVersioned(true)
+	        .setSoftDelete(true)
+	        .setNamespace(FunctionDefinition.SCHEMA.getNamespace())
+	        .setName(FunctionDefinition.SCHEMA.getName())
+	        .setWritePermission(CoreConstants.PERMISSION_DEVELOPER)
+	        .setUpdatePermission(CoreConstants.PERMISSION_DEVELOPER)
+	        .setDeletePermission(CoreConstants.PERMISSION_DEVELOPER)
+	        .setUniqueKeys(List.of(new Key().setFields(List.of(NAMESPACE, NAME))));
 
 	private CoreStoreRecords() {
 	}

@@ -48,9 +48,9 @@ public class MultitenantMongoConnectionService implements DisposableBean {
 			throw nce;
 		}
 	}
-	
+
 	public MongoClient getMongoClient(String tenant) {
-		
+
 		return tenants.get(tenant);
 	}
 
@@ -67,11 +67,12 @@ public class MultitenantMongoConnectionService implements DisposableBean {
 		if (tenants.isEmpty())
 			return;
 
-		tenants.forEach((k, v) -> {
+		tenants.forEach((k, v) ->
+			{
 
-			logger.debug("Closing connection {} ", k);
-			v.close();
-		});
+				logger.debug("Closing connection {} ", k);
+				v.close();
+			});
 	}
 
 }

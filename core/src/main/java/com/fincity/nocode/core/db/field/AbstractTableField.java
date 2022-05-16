@@ -13,86 +13,86 @@ public abstract class AbstractTableField implements IField {
 	private static final long serialVersionUID = 8705867846156922835L;
 
 	@Override
-	public  Condition equalTo(JsonPrimitive value) {
+	public Condition equalTo(JsonPrimitive value) {
 		return getCondition(ConditionType.EQUAL, value);
 	}
 
 	@Override
-	public  Condition notEqualTo(JsonPrimitive value) {
+	public Condition notEqualTo(JsonPrimitive value) {
 		return getCondition(ConditionType.NOT_EQUAL, value);
 	}
 
 	@Override
-	public  Condition lessThan(JsonPrimitive value) {
+	public Condition lessThan(JsonPrimitive value) {
 		return getCondition(ConditionType.LESS_THAN, value);
 	}
 
 	@Override
-	public  Condition lessThanOrEqual(JsonPrimitive value) {
+	public Condition lessThanOrEqual(JsonPrimitive value) {
 		return getCondition(ConditionType.LESS_THAN_EQUAL, value);
 	}
 
 	@Override
-	public  Condition greaterThan(JsonPrimitive value) {
+	public Condition greaterThan(JsonPrimitive value) {
 		return getCondition(ConditionType.GREATER_THAN, value);
 	}
 
 	@Override
-	public  Condition greaterThanOrEqual(JsonPrimitive value) {
+	public Condition greaterThanOrEqual(JsonPrimitive value) {
 		return getCondition(ConditionType.GREATER_THAN_EQUAL, value);
 	}
 
 	@Override
-	public  Condition equalTo(IField value) {
+	public Condition equalTo(IField value) {
 		return getCondition(ConditionType.EQUAL, value);
 	}
 
 	@Override
-	public  Condition notEqualTo(IField value) {
+	public Condition notEqualTo(IField value) {
 		return getCondition(ConditionType.NOT_EQUAL, value);
 	}
 
 	@Override
-	public  Condition lessThan(IField value) {
+	public Condition lessThan(IField value) {
 		return getCondition(ConditionType.LESS_THAN, value);
 	}
 
 	@Override
-	public  Condition lessThanOrEqual(IField value) {
+	public Condition lessThanOrEqual(IField value) {
 		return getCondition(ConditionType.LESS_THAN_EQUAL, value);
 	}
 
 	@Override
-	public  Condition greaterThan(IField value) {
+	public Condition greaterThan(IField value) {
 		return getCondition(ConditionType.GREATER_THAN, value);
 	}
 
 	@Override
-	public  Condition greaterThanOrEqual(IField value) {
+	public Condition greaterThanOrEqual(IField value) {
 		return getCondition(ConditionType.GREATER_THAN_EQUAL, value);
 	}
-	
+
 	@Override
-	public  Condition in(List<JsonPrimitive> values) {
+	public Condition in(List<JsonPrimitive> values) {
 		return new InCondition(this, values);
 	}
-	
+
 	@Override
-	public  Condition in(JsonPrimitive... values) {
+	public Condition in(JsonPrimitive... values) {
 		return in(List.of(values));
 	}
-	
+
 	@Override
 	public Condition isNotNull() {
 		return new UnaryCondition(ConditionType.NOT_NULL);
 	}
-	
+
 	@Override
 	public Condition isNull() {
 		return new UnaryCondition(ConditionType.NULL);
 	}
 
-	protected abstract Condition getCondition(ConditionType conditionType, JsonPrimitive value) ;
+	protected abstract Condition getCondition(ConditionType conditionType, JsonPrimitive value);
 
-	protected abstract Condition getCondition(ConditionType conditionType, IField value) ;
+	protected abstract Condition getCondition(ConditionType conditionType, IField value);
 }

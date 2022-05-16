@@ -38,10 +38,10 @@ public interface IField extends Serializable {
 	public Condition greaterThanOrEqual(IField value);
 
 	public Condition in(List<JsonPrimitive> values);
-	
-	public Condition in(JsonPrimitive ...values);
-	
+
+	public Condition in(JsonPrimitive... values);
+
 	public Condition isNull();
-	
+
 	public Condition isNotNull();
 }

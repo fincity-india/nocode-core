@@ -25,7 +25,7 @@ public class CompoundCondition extends ArrayList<Condition> implements Condition
 	public ConditionType getType() {
 		return this.type;
 	}
-	
+
 	@Override
 	public Condition and(Condition condition) {
 		if (type != ConditionType.AND)
@@ -33,7 +33,7 @@ public class CompoundCondition extends ArrayList<Condition> implements Condition
 		this.add(condition);
 		return this;
 	}
-	
+
 	@Override
 	public Condition or(Condition condition) {
 		if (type != ConditionType.OR)

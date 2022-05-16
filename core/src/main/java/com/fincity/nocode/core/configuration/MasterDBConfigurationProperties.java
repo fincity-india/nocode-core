@@ -15,5 +15,5 @@ public class MasterDBConfigurationProperties {
 
 	private MongoDBCProperties mongo;
 	private R2DBCProperties r2dbc;
-	
+
 }

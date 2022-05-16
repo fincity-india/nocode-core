@@ -24,6 +24,8 @@ public class ConnectionMongoStore extends MongoStore {
 
 	public Flux<Connection> filter(Condition condition, Sort sort) {
 
-		return this.getMongoData().getTemplate().find(this.toQuery(condition, sort), Connection.class);
+		return this.getMongoData()
+		        .getTemplate()
+		        .find(this.toQuery(condition, sort), Connection.class);
 	}
 }

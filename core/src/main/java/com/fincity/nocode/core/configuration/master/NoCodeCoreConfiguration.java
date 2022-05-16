@@ -21,7 +21,7 @@ public abstract class NoCodeCoreConfiguration {
 	public IBase getMasterStore() {
 
 		if (masterDBProps.getMongo() != null) {
-			
+
 			return dbcService.createBase(CoreConstants.TENANT_MASTER, masterDBProps.getMongo());
 		} // Add the r2dbc connection.
 

@@ -25,7 +25,7 @@ public class NumberField extends AbstractTableField {
 		this.schemaType = schemaType;
 
 		if (schemaType != null && name != null
-				&& (schemaType == DOUBLE || schemaType == INTEGER || schemaType == FLOAT || schemaType == LONG))
+		        && (schemaType == DOUBLE || schemaType == INTEGER || schemaType == FLOAT || schemaType == LONG))
 			return;
 
 		throw new FieldException("Only number fields are allowed");
@@ -40,7 +40,7 @@ public class NumberField extends AbstractTableField {
 	public SchemaType getSchemaType() {
 		return this.schemaType;
 	}
-	
+
 	@Override
 	protected Condition getCondition(ConditionType conditionType, JsonPrimitive value) {
 
@@ -54,21 +54,22 @@ public class NumberField extends AbstractTableField {
 	}
 
 	public static Number toNumber(SchemaType type, JsonPrimitive value) {
-		
-		if (value == null || value.isJsonNull()) return null;
-		
+
+		if (value == null || value.isJsonNull())
+			return null;
+
 		switch (type) { // NOSONAR - you are wrong, I get more readability with switch compared to if.
 
-			case DOUBLE:
-				return value.getAsDouble();
-			case INTEGER:
-				return value.getAsInt();
-			case FLOAT:
-				return value.getAsFloat();
-			case LONG:
-				return value.getAsLong();
-			default:
-				return null;
+		case DOUBLE:
+			return value.getAsDouble();
+		case INTEGER:
+			return value.getAsInt();
+		case FLOAT:
+			return value.getAsFloat();
+		case LONG:
+			return value.getAsLong();
+		default:
+			return null;
 		}
 	}
 

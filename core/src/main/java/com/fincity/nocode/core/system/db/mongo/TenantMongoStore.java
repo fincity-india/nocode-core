@@ -16,14 +16,16 @@ public class TenantMongoStore extends MongoStore {
 	public TenantMongoStore(MongoBase mongoData, Schema schema, Store store, String cName) {
 		super(mongoData, schema, store, cName);
 	}
-	
+
 	public Flux<Tenant> filter(Condition condition) {
-		
+
 		return this.filter(condition, (Sort) null);
 	}
-	
+
 	public Flux<Tenant> filter(Condition condition, Sort sort) {
-	
-		return this.getMongoData().getTemplate().find(this.toQuery(condition, sort), Tenant.class);
+
+		return this.getMongoData()
+		        .getTemplate()
+		        .find(this.toQuery(condition, sort), Tenant.class);
 	}
 }

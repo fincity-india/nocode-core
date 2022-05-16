@@ -5,6 +5,7 @@ import static com.fincity.nocode.kirun.engine.constant.KIRunConstants.NAMESPACE;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Stream;
 
 import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
 
@@ -12,6 +13,7 @@ import com.fincity.nocode.core.db.IBase;
 import com.fincity.nocode.core.db.IStore;
 import com.fincity.nocode.core.system.CoreConstants;
 import com.fincity.nocode.core.system.db.mongo.ConnectionMongoStore;
+import com.fincity.nocode.core.system.db.mongo.PackageMongoStore;
 import com.fincity.nocode.core.system.db.mongo.SchemaMongoStore;
 import com.fincity.nocode.core.system.db.mongo.StoreMongoStore;
 import com.fincity.nocode.core.system.db.mongo.TenantMongoStore;
@@ -21,6 +23,8 @@ import com.fincity.nocode.core.system.model.Store;
 import com.fincity.nocode.core.system.model.Tenant;
 import com.fincity.nocode.core.system.model.connection.Connection;
 import com.fincity.nocode.kirun.engine.json.schema.Schema;
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
 
 import reactor.core.publisher.Mono;
@@ -36,17 +40,18 @@ public class MongoBase implements IBase {
 		this.template = template;
 		this.tenant = tenant;
 	}
-	
+
 	@Override
 	public void initializeBaseForTenant() {
 
 		String cName = this.getCollectionName(Schema.SCHEMA);
-		tables.put(cName,
-				new SchemaMongoStore(this, Schema.SCHEMA, CoreStoreRecords.STORE_RECORD_SCHEMA, cName).checkInitialization());
+		var schemaStore = new SchemaMongoStore(this, Schema.SCHEMA, CoreStoreRecords.STORE_RECORD_SCHEMA, cName)
+		        .checkInitialization();
+		tables.put(cName, schemaStore);
 
 		cName = this.getCollectionName(Connection.SCHEMA);
 		tables.put(cName, new ConnectionMongoStore(this, Connection.SCHEMA, Connection.STORE_RECORD, cName)
-				.checkInitialization());
+		        .checkInitialization());
 
 		cName = this.getCollectionName(Store.SCHEMA);
 		tables.put(cName, new StoreMongoStore(this, Store.SCHEMA, Store.STORE_RECORD, cName).checkInitialization());
@@ -55,11 +60,19 @@ public class MongoBase implements IBase {
 
 			cName = this.getCollectionName(Tenant.SCHEMA);
 			tables.put(cName,
-					new TenantMongoStore(this, Tenant.SCHEMA, Tenant.STORE_RECORD, cName).checkInitialization());
+			        new TenantMongoStore(this, Tenant.SCHEMA, Tenant.STORE_RECORD, cName).checkInitialization());
 		}
-		
+
 		cName = this.getCollectionName(Package.SCHEMA);
-		tables.put(cName, new StoreMongoStore(this, Package.SCHEMA, Package.STORE_RECORD, cName).checkInitialization());
+		tables.put(cName,
+		        new PackageMongoStore(this, Package.SCHEMA, Package.STORE_RECORD, cName).checkInitialization());
+
+		Gson gson = new Gson();
+
+		Stream.of(Schema.SCHEMA, Connection.SCHEMA, Store.SCHEMA, Tenant.SCHEMA, Package.SCHEMA)
+		        .map(gson::toJsonTree)
+		        .map(JsonElement::getAsJsonObject)
+		        .forEach(schemaStore::create);
 	}
 
 	@Override
@@ -79,13 +92,19 @@ public class MongoBase implements IBase {
 
 		SchemaMongoStore schemaStore = (SchemaMongoStore) this.tables.get(this.getCollectionName(Schema.SCHEMA));
 
-		Mono<Schema> schema = schemaStore.filter(schemaStore.getField(NAMESPACE).equalTo(new JsonPrimitive(namespace))
-				.and(schemaStore.getField(NAME).equalTo(new JsonPrimitive(storeName)))).next();
+		Mono<Schema> schema = schemaStore.filter(schemaStore.getField(NAMESPACE)
+		        .equalTo(new JsonPrimitive(namespace))
+		        .and(schemaStore.getField(NAME)
+		                .equalTo(new JsonPrimitive(storeName))))
+		        .next();
 
 		StoreMongoStore storeStore = (StoreMongoStore) this.tables.get(this.getCollectionName(Store.SCHEMA));
 
-		Mono<Store> store = storeStore.filter(storeStore.getField(NAMESPACE).equalTo(new JsonPrimitive(namespace))
-				.and(storeStore.getField(NAME).equalTo(new JsonPrimitive(storeName)))).next();
+		Mono<Store> store = storeStore.filter(storeStore.getField(NAMESPACE)
+		        .equalTo(new JsonPrimitive(namespace))
+		        .and(storeStore.getField(NAME)
+		                .equalTo(new JsonPrimitive(storeName))))
+		        .next();
 
 		return schema.flatMap(sch -> store.map(sto -> new MongoStore(this, sch, sto, cName).checkInitialization()));
 	}
@@ -108,10 +127,11 @@ public class MongoBase implements IBase {
 
 		StoreMongoStore storeStore = (StoreMongoStore) this.tables.get(this.getCollectionName(Store.SCHEMA));
 
-		Mono<Store> store = storeStore
-				.filter(storeStore.getField(NAMESPACE).equalTo(new JsonPrimitive(s.getNamespace()))
-						.and(storeStore.getField(NAME).equalTo(new JsonPrimitive(s.getName()))))
-				.next();
+		Mono<Store> store = storeStore.filter(storeStore.getField(NAMESPACE)
+		        .equalTo(new JsonPrimitive(s.getNamespace()))
+		        .and(storeStore.getField(NAME)
+		                .equalTo(new JsonPrimitive(s.getName()))))
+		        .next();
 
 		return store.map(e -> this.getStore(cName, s, e));
 	}

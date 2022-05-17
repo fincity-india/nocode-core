@@ -1,7 +1,5 @@
 package com.fincity.nocode.core.system.db.mongo;
 
-import java.util.List;
-
 import org.springframework.data.domain.Sort;
 
 import com.fincity.nocode.core.db.condition.Condition;
@@ -16,10 +14,6 @@ public class StoreMongoStore extends MongoStore {
 
 	public StoreMongoStore(MongoBase mongoData, Schema schema, Store store, String cName) {
 		super(mongoData, schema, store, cName);
-	}
-
-	public void initialize(List<Store> baseStores) {
-
 	}
 
 	public Flux<Store> filter(Condition condition) {

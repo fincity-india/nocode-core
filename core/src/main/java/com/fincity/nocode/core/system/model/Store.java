@@ -2,9 +2,7 @@ package com.fincity.nocode.core.system.model;
 
 import static com.fincity.nocode.kirun.engine.constant.KIRunConstants.NAME;
 import static com.fincity.nocode.kirun.engine.constant.KIRunConstants.NAMESPACE;
-import static com.fincity.nocode.kirun.engine.json.schema.type.SchemaType.BOOLEAN;
 import static com.fincity.nocode.kirun.engine.json.schema.type.SchemaType.OBJECT;
-import static com.fincity.nocode.kirun.engine.json.schema.type.SchemaType.STRING;
 import static java.util.Map.entry;
 
 import java.io.Serializable;
@@ -36,17 +34,12 @@ public class Store implements Serializable {
 	        .setName(SCHEMA_NAME)
 	        .setTitle(SCHEMA_NAME)
 	        .setVersion(1)
-	        .setProperties(Map.ofEntries(entry(NAMESPACE, Schema.of(NAMESPACE, STRING)),
-	                entry("id", Schema.of("id", STRING)), entry("readPermission", Schema.of("readPermission", STRING)),
-	                entry(NAME, Schema.of(NAME, STRING)),
-	                entry("writePermission", Schema.of("writePermission", STRING)),
-	                entry("updatePermission", Schema.of("updatePermission", STRING)),
-	                entry("deletePermission", Schema.of("deletePermission", STRING)),
-	                entry(CONNECTION_ID, Schema.of(CONNECTION_ID, STRING)),
-	                entry("versioned", Schema.of("versioned", BOOLEAN)),
-	                entry("softDelete", Schema.of("softDelete", BOOLEAN)),
-	                entry("audited", Schema.of("audited", BOOLEAN)),
-	                entry("uniqueKeys", Schema.ofArray("uniqueKeys", Key.SCHEMA)),
+	        .setProperties(Map.ofEntries(entry(NAMESPACE, Schema.STRING), entry("id", Schema.STRING),
+	                entry("readPermission", Schema.STRING), entry(NAME, Schema.STRING),
+	                entry("writePermission", Schema.STRING), entry("updatePermission", Schema.STRING),
+	                entry("deletePermission", Schema.STRING), entry(CONNECTION_ID, Schema.STRING),
+	                entry("versioned", Schema.BOOLEAN), entry("softDelete", Schema.BOOLEAN),
+	                entry("audited", Schema.BOOLEAN), entry("uniqueKeys", Schema.ofArray("uniqueKeys", Key.SCHEMA)),
 	                entry("keys", Schema.ofArray("keys", Key.SCHEMA)),
 	                entry("foreignKeys", Schema.ofArray("foreignKeys", ForeignKey.SCHEMA))));
 

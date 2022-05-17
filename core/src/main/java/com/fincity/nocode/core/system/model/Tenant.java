@@ -30,10 +30,9 @@ public class Tenant implements Serializable {
 	        .setName(SCHEMA_NAME)
 	        .setTitle(SCHEMA_NAME)
 	        .setVersion(1)
-	        .setProperties(Map.of("id", Schema.of("id", STRING), "code", Schema.of("code", STRING)
+	        .setProperties(Map.of("id", Schema.STRING, "code", Schema.of("code", STRING)
 	                .setMinLength(5)
-	                .setMaxLength(5), "name", Schema.of("name", STRING), CONNECTION_ID,
-	                Schema.of(CONNECTION_ID, STRING)));
+	                .setMaxLength(5), "name", Schema.STRING, CONNECTION_ID, Schema.STRING));
 
 	public static final Store STORE_RECORD = new Store().setAudited(true)
 	        .setVersioned(true)

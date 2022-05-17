@@ -21,7 +21,7 @@ public class MongoDBCProperties implements IConnectionProperties {
 	        .setName(SCHEMA_NAME)
 	        .setNamespace(CoreConstants.NAMESPACE_CORE)
 	        .setType(new SingleType(SchemaType.OBJECT))
-	        .setProperties(Map.of("uri", Schema.of("uri", SchemaType.STRING)));
+	        .setProperties(Map.of("uri", Schema.STRING));
 
 	private String uri;
 

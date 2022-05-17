@@ -23,9 +23,8 @@ public class ForeignKey implements Serializable {
 	        .setName(SCHEMA_NAME)
 	        .setTitle(SCHEMA_NAME)
 	        .setType(Type.of(SchemaType.OBJECT))
-	        .setProperties(Map.of("field", Schema.of("field", SchemaType.STRING), "namespace",
-	                Schema.of("namespace", SchemaType.STRING), "name", Schema.of("name", SchemaType.STRING),
-	                "foreignField", Schema.of("foreignField", SchemaType.STRING)));
+	        .setProperties(Map.of("field", Schema.STRING, "namespace", Schema.STRING, "name", Schema.STRING,
+	                "foreignField", Schema.STRING));
 
 	private String field;
 	private String namespace;

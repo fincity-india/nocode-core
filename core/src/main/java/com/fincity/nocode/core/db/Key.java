@@ -25,8 +25,8 @@ public class Key implements Serializable {
 	        .setName(SCHEMA_NAME)
 	        .setTitle(SCHEMA_NAME)
 	        .setType(Type.of(SchemaType.OBJECT))
-	        .setProperties(Map.of("fields", Schema.ofArray("fields", Schema.of("field", SchemaType.STRING)),
-	                "isDescending", Schema.of("isDescending", SchemaType.BOOLEAN)
+	        .setProperties(Map.of("fields", Schema.ofArray("fields", Schema.STRING), "isDescending",
+	                Schema.of("isDescending", SchemaType.BOOLEAN)
 	                        .setDefaultValue(new JsonPrimitive(Boolean.TRUE))));
 
 	private List<String> fields;

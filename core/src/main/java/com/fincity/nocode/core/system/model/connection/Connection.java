@@ -36,7 +36,7 @@ public class Connection implements Serializable {
 	        .setName(SCHEMA_NAME)
 	        .setTitle(SCHEMA_NAME)
 	        .setVersion(1)
-	        .setProperties(Map.of("id", Schema.of("id", STRING), "type", Schema.of("type", STRING)
+	        .setProperties(Map.of("id", Schema.STRING, "type", Schema.of("type", STRING)
 	                .setEnums(Stream.of(ConnectionType.values())
 	                        .map(Object::toString)
 	                        .map(JsonPrimitive::new)

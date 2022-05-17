@@ -1,14 +1,12 @@
 package com.fincity.nocode.core.system.model;
 
 import static com.fincity.nocode.kirun.engine.json.schema.type.SchemaType.OBJECT;
-import static com.fincity.nocode.kirun.engine.json.schema.type.SchemaType.STRING;
 
 import java.io.Serializable;
 import java.util.Map;
 
 import com.fincity.nocode.core.system.CoreConstants;
 import com.fincity.nocode.kirun.engine.json.schema.Schema;
-import com.fincity.nocode.kirun.engine.json.schema.type.SchemaType;
 import com.fincity.nocode.kirun.engine.json.schema.type.SingleType;
 
 import lombok.AllArgsConstructor;
@@ -29,10 +27,8 @@ public class Package implements Serializable {
 	        .setName(SCHEMA_NAME)
 	        .setTitle(SCHEMA_NAME)
 	        .setVersion(1)
-	        .setProperties(Map.of("id", Schema.of("id", STRING), "packageName",
-	                Schema.of("packageName", SchemaType.STRING), "namespace", Schema.of("namespace", SchemaType.STRING),
-	                "packageObjectName", Schema.of("packageObjectName", SchemaType.STRING), "objectName",
-	                Schema.of("objectName", SchemaType.STRING)));
+	        .setProperties(Map.of("id", Schema.STRING, "packageName", Schema.STRING, "namespace", Schema.STRING,
+	                "packageObjectName", Schema.STRING, "objectName", Schema.STRING));
 
 	public static final Store STORE_RECORD = new Store().setAudited(true)
 	        .setVersioned(true)

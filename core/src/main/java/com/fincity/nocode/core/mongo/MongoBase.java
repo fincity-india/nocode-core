@@ -54,7 +54,8 @@ public class MongoBase implements IBase {
 		        .checkInitialization());
 
 		cName = this.getCollectionName(Store.SCHEMA);
-		tables.put(cName, new StoreMongoStore(this, Store.SCHEMA, Store.STORE_RECORD, cName).checkInitialization());
+		var storeStore = new StoreMongoStore(this, Store.SCHEMA, Store.STORE_RECORD, cName).checkInitialization();
+		tables.put(cName, storeStore);
 
 		if (tenant.equals(CoreConstants.TENANT_MASTER)) {
 
@@ -70,6 +71,11 @@ public class MongoBase implements IBase {
 		Gson gson = new Gson();
 
 		Stream.of(Schema.SCHEMA, Connection.SCHEMA, Store.SCHEMA, Tenant.SCHEMA, Package.SCHEMA)
+		        .map(gson::toJsonTree)
+		        .map(JsonElement::getAsJsonObject)
+		        .forEach(schemaStore::create);
+		
+		Stream.of(CoreStoreRecords.STORE_RECORD_SCHEMA, Connection.STORE_RECORD, Store.STORE_RECORD, Tenant.STORE_RECORD, Package.STORE_RECORD)
 		        .map(gson::toJsonTree)
 		        .map(JsonElement::getAsJsonObject)
 		        .forEach(schemaStore::create);

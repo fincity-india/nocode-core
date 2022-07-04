@@ -28,11 +28,10 @@ public class Tenant implements Serializable {
 	public static final Schema SCHEMA = new Schema().setType(new SingleType(OBJECT))
 	        .setNamespace(CoreConstants.NAMESPACE_CORE)
 	        .setName(SCHEMA_NAME)
-	        .setTitle(SCHEMA_NAME)
 	        .setVersion(1)
-	        .setProperties(Map.of("id", Schema.STRING, "code", Schema.of("code", STRING)
+	        .setProperties(Map.of("id", Schema.ofString("id"), "code", Schema.of("code", STRING)
 	                .setMinLength(5)
-	                .setMaxLength(5), "name", Schema.STRING, CONNECTION_ID, Schema.STRING));
+	                .setMaxLength(5), "name", Schema.ofString("name"), CONNECTION_ID, Schema.ofString(CONNECTION_ID)));
 
 	public static final Store STORE_RECORD = new Store().setAudited(true)
 	        .setVersioned(true)

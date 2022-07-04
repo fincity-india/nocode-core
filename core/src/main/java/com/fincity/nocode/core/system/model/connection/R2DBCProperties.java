@@ -22,19 +22,23 @@ public class R2DBCProperties implements IConnectionProperties {
 
 	public static final String SCHEMA_NAME = "R2DBCProperties";
 
-	public static final Schema SCHEMA = new Schema().setTitle(SCHEMA_NAME)
-	        .setName(SCHEMA_NAME)
+	public static final Schema SCHEMA = new Schema().setName(SCHEMA_NAME)
 	        .setNamespace(CoreConstants.NAMESPACE_CORE)
 	        .setType(new SingleType(OBJECT))
-	        .setProperties(Map.of("name", Schema.STRING, "generateUniqueName", Schema.BOOLEAN, "url", Schema.STRING,
-	                "username", Schema.STRING, "password", Schema.STRING, "properties", Schema.ofObject("properties")
-	                        .setAdditionalProperties(new AdditionalPropertiesType().setSchemaValue(Schema.STRING)),
+	        .setProperties(Map.of("name", Schema.ofString("name"), "generateUniqueName",
+	                Schema.ofBoolean("generateUniqueName"), "url", Schema.ofString("url"), "username",
+	                Schema.ofString("username"), "password", Schema.ofString("password"), "properties",
+	                Schema.ofObject("properties")
+	                        .setAdditionalProperties(
+	                                new AdditionalPropertiesType().setSchemaValue(Schema.ofString("property"))),
 	                "pool", Schema.ofObject("pool")
-	                        .setProperties(Map.of("maxIdleTime", Schema.STRING, "maxLifeTime", Schema.STRING,
-	                                "maxAcquireTime", Schema.STRING, "maxCreateConnectionTime", Schema.STRING,
-	                                "initialSize", Schema.INTEGER, "maxSize", Schema.INTEGER, "validationQuery",
-	                                Schema.STRING)),
-	                "uniqueName", Schema.STRING));
+	                        .setProperties(Map.of("maxIdleTime", Schema.ofString("maxIdleTime"), "maxLifeTime",
+	                                Schema.ofString("maxLifeTime"), "maxAcquireTime", Schema.ofString("maxAcquireTime"),
+	                                "maxCreateConnectionTime", Schema.ofString("maxCreateConnectionTime"),
+	                                "initialSize", Schema.ofInteger("initialSize"), "maxSize",
+	                                Schema.ofInteger("maxSize"), "validationQuery",
+	                                Schema.ofString("validationQuery"))),
+	                "uniqueName", Schema.ofString("uniqueName")));
 
 	private String name;
 	private boolean generateUniqueName;

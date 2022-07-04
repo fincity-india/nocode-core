@@ -17,11 +17,11 @@ public class MongoDBCProperties implements IConnectionProperties {
 
 	public static final String SCHEMA_NAME = "MongoDBCProperties";
 
-	public static final Schema SCHEMA = new Schema().setTitle(SCHEMA_NAME)
+	public static final Schema SCHEMA = new Schema()
 	        .setName(SCHEMA_NAME)
 	        .setNamespace(CoreConstants.NAMESPACE_CORE)
 	        .setType(new SingleType(SchemaType.OBJECT))
-	        .setProperties(Map.of("uri", Schema.STRING));
+	        .setProperties(Map.of("uri", Schema.ofString("uri")));
 
 	private String uri;
 

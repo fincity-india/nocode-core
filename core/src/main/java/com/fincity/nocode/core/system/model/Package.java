@@ -25,10 +25,10 @@ public class Package implements Serializable {
 	public static final Schema SCHEMA = new Schema().setType(new SingleType(OBJECT))
 	        .setNamespace(CoreConstants.NAMESPACE_CORE)
 	        .setName(SCHEMA_NAME)
-	        .setTitle(SCHEMA_NAME)
 	        .setVersion(1)
-	        .setProperties(Map.of("id", Schema.STRING, "packageName", Schema.STRING, "namespace", Schema.STRING,
-	                "packageObjectName", Schema.STRING, "objectName", Schema.STRING));
+	        .setProperties(Map.of("id", Schema.ofString("id"), "packageName", Schema.ofString("packageName"),
+	                "namespace", Schema.ofString("namespace"), "packageObjectName",
+	                Schema.ofString("packageObjectName"), "objectName", Schema.ofString("objectName")));
 
 	public static final Store STORE_RECORD = new Store().setAudited(true)
 	        .setVersioned(true)

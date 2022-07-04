@@ -23,9 +23,8 @@ public class Key implements Serializable {
 
 	public static final Schema SCHEMA = new Schema().setNamespace(CoreConstants.NAMESPACE_CORE)
 	        .setName(SCHEMA_NAME)
-	        .setTitle(SCHEMA_NAME)
 	        .setType(Type.of(SchemaType.OBJECT))
-	        .setProperties(Map.of("fields", Schema.ofArray("fields", Schema.STRING), "isDescending",
+	        .setProperties(Map.of("fields", Schema.ofArray("fields", Schema.ofString("field")), "isDescending",
 	                Schema.of("isDescending", SchemaType.BOOLEAN)
 	                        .setDefaultValue(new JsonPrimitive(Boolean.TRUE))));
 

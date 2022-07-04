@@ -32,14 +32,16 @@ public class Store implements Serializable {
 	public static final Schema SCHEMA = new Schema().setType(new SingleType(OBJECT))
 	        .setNamespace(CoreConstants.NAMESPACE_CORE)
 	        .setName(SCHEMA_NAME)
-	        .setTitle(SCHEMA_NAME)
 	        .setVersion(1)
-	        .setProperties(Map.ofEntries(entry(NAMESPACE, Schema.STRING), entry("id", Schema.STRING),
-	                entry("readPermission", Schema.STRING), entry(NAME, Schema.STRING),
-	                entry("writePermission", Schema.STRING), entry("updatePermission", Schema.STRING),
-	                entry("deletePermission", Schema.STRING), entry(CONNECTION_ID, Schema.STRING),
-	                entry("versioned", Schema.BOOLEAN), entry("softDelete", Schema.BOOLEAN),
-	                entry("audited", Schema.BOOLEAN), entry("uniqueKeys", Schema.ofArray("uniqueKeys", Key.SCHEMA)),
+	        .setProperties(Map.ofEntries(entry(NAMESPACE, Schema.ofString(NAMESPACE)),
+	                entry("id", Schema.ofString("id")), entry("readPermission", Schema.ofString("readPermission")),
+	                entry(NAME, Schema.ofString(NAME)), entry("writePermission", Schema.ofString("writePermission")),
+	                entry("updatePermission", Schema.ofString("updatePermission")),
+	                entry("deletePermission", Schema.ofString("deletePermission")),
+	                entry(CONNECTION_ID, Schema.ofString(CONNECTION_ID)),
+	                entry("versioned", Schema.ofBoolean("versioned")),
+	                entry("softDelete", Schema.ofBoolean("softDelete")), entry("audited", Schema.ofBoolean("audited")),
+	                entry("uniqueKeys", Schema.ofArray("uniqueKeys", Key.SCHEMA)),
 	                entry("keys", Schema.ofArray("keys", Key.SCHEMA)),
 	                entry("foreignKeys", Schema.ofArray("foreignKeys", ForeignKey.SCHEMA))));
 
